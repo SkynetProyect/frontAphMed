@@ -4,6 +4,8 @@ import Login from "../../../../logic/domain/model/Login";
 import useForm from "../../../../logic/hook/useForm";
 import type TypeccInterface from "../../../../logic/domain/interfaces/TypeccInterface";
 import { useEffect, useState } from "react";
+import FormDivText from "../../../logics/FormDivText";
+import FormDivSelect from "../../../logics/FormDivSelect";
 
 export default function FormularioLoginUser() {
 
@@ -18,40 +20,10 @@ export default function FormularioLoginUser() {
   
   return (
     <form onSubmit={handleSubmit}>
-      <div>
-        <label htmlFor="tipo_documento">Tipo de Documento:</label>
-        <select
-          id="tipo_documento"
-          name="tipo_documento"
-          onChange={handleChange}
-        >
-          {typescc.map((type) => (
-            <option key={type.id} value={type.id ?? ""}> 
-              {type.nombre}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label htmlFor="identificacion">Identificación:</label>
-        <input
-          id="identificacion"
-          name="identificacion"
-          type="text"
-          value={form.identificacion}
-          onChange={handleChange}
-        />
-      </div>
-      <div>
-        <label htmlFor="clave">Clave:</label>
-        <input
-          id="clave"
-          name="clave"
-          type="password"
-          value={form.clave}
-          onChange={handleChange}
-        />
-      </div>
+      <FormDivSelect nombre="tipo_documento" titulo="Tipo de Documento" id="tipo_documento" visuals="w-full" 
+                    value={"id"} alcambio={handleChange} iterador={typescc} nombredesignado={"nombre"} />
+      <FormDivText nombre="identificacion" titulo="Identificación" id="identificacion" type="text" visuals="w-full" value={form.identificacion} alcambio={handleChange} />
+      <FormDivText nombre="clave" titulo="Clave" id="clave" type="password" visuals="w-full" value={form.clave} alcambio={handleChange} />
       <button type="submit">Ingresar</button>
     </form>
   );

@@ -1,6 +1,6 @@
-import type RegisterInterface from "../interfaces/RegisterInterface";
+import type PacienteInterface from "../interfaces/PacienteInterface";
 
-export default class Register implements RegisterInterface{
+export default class Register implements PacienteInterface{
     nombre: string = "";
     email: string = "";
     telefono: string = "";
