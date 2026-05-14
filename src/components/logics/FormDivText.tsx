@@ -8,8 +8,11 @@ export default function FormDivText({nombre, titulo, id, type, value, alcambio, 
                             value: string, alcambio: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void, visuals?: string}>) {
   return (
     <div>
-      <label htmlFor={nombre}>{titulo}</label>
+      <label className="block text-sm font-medium " htmlFor={nombre}>
+        {titulo}
+      </label>
       <input
+        className={visuals}
         id={id}
         type={type}
         name={nombre}
