@@ -1,34 +1,23 @@
-import { useEffect, useState } from "react";
-import TypeccAdapter from "../../../services/TypeccAdapter";
-import type PacienteInterface from "../../../logic_components/domain/interfaces/PacienteInterface";
-import Register from "../../../logic_components/domain/models/Register";
-import useForm from "../../../components/hooks/useForm";
-import type TypeccInterface from "../../../logic_components/domain/interfaces/TypeccInterface";
-import FormDivText
- from "../../../components/logics/FormDivText";
+import FormDivText from "../../../components/logics/FormDivText";
 import FormDivSelect from "../../../components/logics/FormDivSelect";
+import fnc_formularioRegister from "../functions/fnc_formularioRegister";
 
-export default function FormularioRegister() {
 
-  const {form, setForm, handleChange, handleSubmit} = useForm<PacienteInterface>(Register,()=>{});
-  const [typescc, setTypescc] = useState<TypeccInterface[]>([]);
 
-  useEffect(() => {
-    new TypeccAdapter().getAll().then((data) => {
-      setTypescc(data);
-    }); 
-  }, []);
+export default function FormularioRegister({fnc}: {fnc: (form:any) => any}) {
+
+  const formularioRegister = fnc_formularioRegister({fnc});
 
   return (
-    <form onSubmit={handleSubmit} className=" w-lg bg-cyan-300/45 p-8 rounded-lg shadow-md">
-      <FormDivText nombre="nombre" titulo="Nombre del Paciente" id="nombre" type="text" visuals="p-1 w-full bg-cyan-100 rounded-lg" value={form.nombre} alcambio={handleChange} />
-      <FormDivText nombre="email" titulo="Email" id="email" type="email" visuals="p-1 w-full bg-cyan-100 rounded-lg" value={form.email} alcambio={handleChange} />
-      <FormDivText nombre="telefono" titulo="Teléfono" id="telefono" type="number" visuals="p-1 w-full bg-cyan-100 rounded-lg" value={form.telefono} alcambio={handleChange} />
-      <FormDivSelect nombre="tipo_documento" titulo="Tipo de Documento" id="tipo_documento" visuals="p-1 w-full bg-cyan-100 rounded-lg" 
-                    value={"id"} alcambio={handleChange} iterador={typescc} nombredesignado={"nombre"} />
-      <FormDivText nombre="identificacion" titulo="Identificación" id="identificacion" type="text" visuals="p-1 w-full bg-cyan-100 rounded-lg" value={form.identificacion} alcambio={handleChange} />
-      <FormDivText nombre="clave" titulo="Clave" id="clave" type="password" visuals="p-1 w-full bg-cyan-100 rounded-lg" value={form.clave} alcambio={handleChange} />
-      <button type="submit" className=" mt-5 rounded-lg bg-black text-white p-2">Registrarse</button>
+    <form onSubmit={formularioRegister.handleSubmit} className="w-2xl bg-gray-50/50 p-8 font-bold rounded-lg shadow-md">
+      <FormDivText nombre="nombre" titulo="Nombre del Paciente" id="nombre" type="text" visuals={formularioRegister.visuales} value={formularioRegister.form.nombre} alcambio={formularioRegister.handleChange} />
+      <FormDivText nombre="email" titulo="Email" id="email" type="email" visuals={formularioRegister.visuales} value={formularioRegister.form.email} alcambio={formularioRegister.handleChange} />
+      <FormDivText nombre="telefono" titulo="Teléfono" id="telefono" type="number" visuals={formularioRegister.visuales} value={formularioRegister.form.telefono} alcambio={formularioRegister.handleChange} />
+      <FormDivSelect nombre="tipo_documento" titulo="Tipo de Documento" id="tipo_documento" visuals={formularioRegister.visuales} 
+                    value={"id"} alcambio={formularioRegister.handleChange} iterador={formularioRegister.typescc} nombredesignado={"nombre"} />
+      <FormDivText nombre="identificacion" titulo="Identificación" id="identificacion" type="text" visuals={formularioRegister.visuales} value={formularioRegister.form.identificacion} alcambio={formularioRegister.handleChange} />
+      <FormDivText nombre="clave" titulo="Clave" id="clave" type="password" visuals={formularioRegister.visuales} value={formularioRegister.form.clave} alcambio={formularioRegister.handleChange} />
+      <button type="submit" className=" cursor-pointer mt-5 rounded-lg bg-black text-white p-2">Registrar</button>
     </form>
   );
 }

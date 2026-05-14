@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
-import videoBg from "../../public/mainescene.mp4";
+import videoBg from "../../../public/mainescene.mp4";
 import FormularioRegister from "./forms/FormularioRegister";
+import createPacient from "./functions/fnc_createPacient";
 
 export default function Register() {
 
@@ -80,7 +81,7 @@ export default function Register() {
 
             <div className="flex justify-center items-center w-full h-full">
 
-                <FormularioRegister />
+                <FormularioRegister fnc={createPacient}/>
 
             </div>
 

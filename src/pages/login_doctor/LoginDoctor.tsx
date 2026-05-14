@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import videoBg from "../../public/operationroom.mp4";
+import videoBg from "../../../public/operationroom.mp4";
 import FormularioLoginDoctor from "./forms/FormularioLoginDoctor";
 
 export default function LoginDoctor() {
