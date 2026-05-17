@@ -11,9 +11,9 @@ export type LoginResponse = {
     } | null;
 };
 
-export const loginWithBearer = async (identificacion: string, password: string): Promise<LoginResponse> => {
+export const loginWithBearer = async (identificacion: string, password: string,is_doctor: boolean): Promise<LoginResponse> => {
     const adapter = new PacienteAdapter();
-    const response = await adapter.login(identificacion, password);
+    const response = await adapter.login(identificacion, password,is_doctor);
 
     if (response && response.codigo === 200 && response.data?.token) {
         setAuthToken(response.data.token);

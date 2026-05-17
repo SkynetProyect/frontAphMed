@@ -32,7 +32,7 @@ export default function AppRouter(){
                 <Route path='/login_user' element={<LoginUser/>}/>
                 <Route path='/seepatient' element={<RequireAuth><><HeaderL/><Customers/></></RequireAuth>}/>
                 <Route path='/procedimiento/:id' element={<RequireAuth><NavMosaico /></RequireAuth>}/>
-                <Route path='/procedimientos/:id' element={<RequireAuth><Procedimientos /></RequireAuth>}/>
+                <Route path='/procedimientos/:id' element={<RequireAuth><HeaderL/><Procedimientos /></RequireAuth>}/>
                 <Route path='*' element={<Navigate to='/' replace />}/>
             </Routes>
         

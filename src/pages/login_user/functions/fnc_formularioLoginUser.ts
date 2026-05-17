@@ -13,7 +13,7 @@ export default function fnc_formularioLoginUser() {
     const [ errores, setErrores ] = useState<String []>([]);
     const iniciarsesion = (login: Login) => {
         console.log("Login data:", login);
-        loginWithBearer(login.identificacion, login.clave).then((response) => {
+        loginWithBearer(login.identificacion, login.clave, false).then((response) => {
             if (response.codigo === 200 && response.data?.paciente?.id) {
                 navigate("/procedimientos/" + response.data.paciente.id);
             } else {

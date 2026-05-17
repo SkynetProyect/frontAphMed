@@ -18,7 +18,7 @@ export default function useProcedimientos(idpatient: number) {
         setLoading(true);
 
         Promise.all([
-            new ProcedimientoAdapter().getAll(),
+            new ProcedimientoAdapter().getByPaciente(idpatient),
             new CategoriaAdapter().getAll()
         ])
         .then(([procedimientosData, categoriasData]) => {

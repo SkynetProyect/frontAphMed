@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import ProcedimientoList from "./components/ProcedimientoList";
 import useProcedimientos from "./functions/fnc_procedimientos";
-import HeaderL from "../../components/header/HeaderL";
 import CButton from "../../components/logics/CButton";
 import FormularioProcedimiento from "./forms/FormularioProcedimiento";
 import Popup from "reactjs-popup";
@@ -12,17 +11,19 @@ export default function Procedimientos({ idpatient }: Readonly<{ idpatient?: num
     const patientId = idpatient ?? Number.parseInt(params.id ?? "0", 10);
     //* react functions separated */
     const fncprocedimientos = useProcedimientos(patientId);
-    console.log(fncprocedimientos.categorias);
+    console.log(fncprocedimientos.procedimientos);
     //* variables with visual repetitive content */
     const table_column_visuals = "px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500";
     const table_main_visual = "min-w-full border-collapse";
 
     return (
-        <>
-        <HeaderL/>
+    <>
+        <div className="max-h-[70vh] overflow-y-auto border rounded-lg">
+            
             <table className={table_main_visual}>
+                
                 {/* Header */}
-                <thead className="bg-gray-50 border-b border-gray-200">
+                <thead className="bg-gray-50 border-b border-gray-200 sticky top-0 z-10">
                     <tr>
                         <th className={table_column_visuals}>
                             Nombre
@@ -39,13 +40,15 @@ export default function Procedimientos({ idpatient }: Readonly<{ idpatient?: num
                 </thead>
 
                 {/* Body */}
-                <tbody className="divide-y divide-gray-100  ">
-                    {
-                    fncprocedimientos.procedimientos.map((procedimiento) => {
-                        console.log(procedimiento)
-                        const categoryName = fncprocedimientos.categorias.find((cate) => cate.id == procedimiento.categoria_id)!.nombre;
+                <tbody className="divide-y divide-gray-100">
+                    {fncprocedimientos.procedimientos.map((procedimiento) => {
+                        const categoryName =
+                            fncprocedimientos.categorias.find(
+                                (cate) => cate.id == procedimiento.categoria_id
+                            )!.nombre;
+
                         return (
-                            <ProcedimientoList 
+                            <ProcedimientoList
                                 key={procedimiento.id}
                                 procedimiento={procedimiento}
                                 categoriaName={categoryName}
@@ -53,11 +56,14 @@ export default function Procedimientos({ idpatient }: Readonly<{ idpatient?: num
                         );
                     })}
                 </tbody>
+
             </table>
-            <Popup trigger={<CButton text="Agregar" />} modal nested>
-                <FormularioProcedimiento id={patientId}/>
-            </Popup>
-            
+
+        </div>
+
+        <Popup trigger={<CButton text="Agregar" />} modal nested>
+            <FormularioProcedimiento id={patientId} />
+        </Popup>
     </>
-    );
+);
 }

@@ -93,13 +93,13 @@ export default class PacienteAdapter{
         });
     }
 
-    login(identificacion: string, password: string): Promise<LoginResponse> {
+    login(identificacion: string, password: string,is_doctor: boolean): Promise<LoginResponse> {
         return fetch(`${backroute}/pacientes/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ identificacion, password })
+            body: JSON.stringify({ identificacion, password,is_doctor })
         })
         .then(response => response.json())
         .then((data: LoginResponse) => {
