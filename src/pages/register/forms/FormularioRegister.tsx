@@ -1,12 +1,12 @@
 import FormDivText from "../../../components/logics/FormDivText";
 import FormDivSelect from "../../../components/logics/FormDivSelect";
-import fnc_formularioRegister from "../functions/fnc_formularioRegister";
+import useFormularioRegister from "../functions/fnc_formularioRegister";
 
 
 
 export default function FormularioRegister({fnc}: {fnc: (form:any) => any}) {
 
-  const formularioRegister = fnc_formularioRegister({fnc});
+  const formularioRegister = useFormularioRegister({fnc});
 
   return (
     <form onSubmit={formularioRegister.handleSubmit} className="w-2xl bg-gray-50/50 p-8 font-bold rounded-lg shadow-md">

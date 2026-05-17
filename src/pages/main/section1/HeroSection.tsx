@@ -30,7 +30,6 @@ export default function HeroSection() {
 
           <HeroFeatures />
 
-          <HeroButtons />
 
           <HeroCertifications />
         </div>

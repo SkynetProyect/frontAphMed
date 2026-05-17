@@ -1,30 +1,23 @@
-import TypeccAdapter from "../../../services/TypeccAdapter";
-import type LoginInterface from "../../../interfaces/LoginInterface";
-import Login from "../../../models/Login";
-import useForm from "../../../components/hooks/useForm";
-import type TypeccInterface from "../../../interfaces/TypeccInterface";
-import { useEffect, useState } from "react";
+
 import FormDivText from "../../../components/logics/FormDivText";
 import FormDivSelect from "../../../components/logics/FormDivSelect";
+import { Link } from "react-router-dom";
+import fnc_formularioLoginUser from "../functions/fnc_formularioLoginUser";
 
 export default function FormularioLoginUser() {
+  const fncformularioLoginUser = fnc_formularioLoginUser();
 
-  const {form, setForm, handleChange, handleSubmit} = useForm<LoginInterface>(Login,()=>{});
-  const [typescc, setTypescc] = useState<TypeccInterface[]>([]);
-
-  useEffect(() => {
-    new TypeccAdapter().getAll().then((data) => {
-      setTypescc(data);
-    });
-  }, []);
   
   return (
-    <form onSubmit={handleSubmit} className="w-2xl bg-gray-50/50 p-8 font-bold rounded-lg shadow-md">
+    <form onSubmit={fncformularioLoginUser.handleSubmit} className="w-2xl bg-gray-50/50 p-8 font-bold rounded-lg shadow-md">
       <FormDivSelect nombre="tipo_documento" titulo="Tipo de Documento" id="tipo_documento" visuals="p-1 w-full bg-cyan-100 rounded-lg" 
-                    value={"id"} alcambio={handleChange} iterador={typescc} nombredesignado={"nombre"} />
-      <FormDivText nombre="identificacion" titulo="Identificación" id="identificacion" type="text" visuals="p-1 m-1 w-full bg-cyan-100 text-center rounded-lg" value={form.identificacion} alcambio={handleChange} />
-      <FormDivText nombre="clave" titulo="Clave" id="clave" type="password" visuals="p-1 m-1 w-full bg-cyan-100 text-center rounded-lg" value={form.clave} alcambio={handleChange} />
+                    value={"id"} alcambio={fncformularioLoginUser.handleChange} iterador={fncformularioLoginUser.typescc} nombredesignado={"nombre"} />
+      <FormDivText nombre="identificacion" titulo="Identificación" id="identificacion" type="text" visuals="p-1 m-1 w-full bg-cyan-100 text-center rounded-lg" value={fncformularioLoginUser.form.identificacion} alcambio={fncformularioLoginUser.handleChange} />
+      <FormDivText nombre="clave" titulo="Clave" id="clave" type="password" visuals="p-1 m-1 w-full bg-cyan-100 text-center rounded-lg" value={fncformularioLoginUser.form.clave} alcambio={fncformularioLoginUser.handleChange} />
+      {fncformularioLoginUser.errores.map((errormsg) => (<p className=" text-red">{errormsg}</p>))}
       <button type="submit" className=" mt-5 rounded-lg bg-black text-white p-2">Ingresar</button>
+      <Link to="/register" className=" mt-5 rounded-lg bg-gray-300 text-black p-2 block text-center">¿No tienes una cuenta? Regístrate aquí</Link>
+    
     </form>
   );
 }

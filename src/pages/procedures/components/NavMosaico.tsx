@@ -1,36 +1,213 @@
-import type ImagenInterface from "../../logic/domain/interfaces/ImagenInterface";
-import { use, useEffect, useState } from "react";
-import type VideoInterface from "../../logic/domain/interfaces/VideoInterface";
-import type DocumentoInterface from "../../logic/domain/interfaces/DocumentoInterface";
-import DocMosaico from "./DocMosaico";
+
+import HeaderL from "../../../components/header/HeaderL";
+import useNavMosaico from "../functions/fnc_navMosaico";
+import { useNavigate, useParams } from "react-router-dom";
+import FormDivText from "../../../components/logics/FormDivText";
+import FormDivSelect from "../../../components/logics/FormDivSelect";
 import ImgMosaico from "./ImgMosaico";
 import VidMosaico from "./VidMosaico";
+import type VideoInterface from "../../../interfaces/VideoInterface";
+import type ImagenInterface from "../../../interfaces/ImagenInterface";
+import DocMosaico from "./DocMosaico";
+import UploadImagenCard from "./UploadImagenCard";
 
-export default function NavMosaico({procedimientoId}: Readonly<{procedimientoId: number}>) {
+export default function NavMosaico() {
 
-    const [activeTab, setActiveTab] = useState<"imagenes" | "videos" | "documentos">("imagenes");
-    const [imagenes, setImagenes] = useState<ImagenInterface[]>([]);
-    const [videos, setVideos] = useState<VideoInterface[]>([]);
-    const [documentos, setDocumentos] = useState<DocumentoInterface[]>([]);
+    const { id } = useParams();
+    const navigator = useNavigate();
 
-    useEffect(() => {
-        // Aquí puedes cargar las imágenes, videos y documentos relacionados con el procedimientoId
-        // Por ejemplo, podrías hacer una llamada a una API para obtener los datos y luego actualizar los estados correspondientes.
-    }, []);
+    const fncnavMosaico = useNavMosaico(Number(id), navigator);
 
     return (
-        <div>
-            <div>
-                <button onClick={() => setActiveTab("imagenes")}>Imagenes</button>
-                <button onClick={() => setActiveTab("videos")}>Videos</button>
-                <button onClick={() => setActiveTab("documentos")}>Documentos</button>
-            </div>
-            <div>
-                {activeTab === "imagenes" && <ImgMosaico imagenes={imagenes} />}
-                {activeTab === "videos" && <VidMosaico videos={videos} />}
-                {activeTab === "documentos" && <DocMosaico documentos={documentos} />}
+        <div className="min-h-screen bg-gray-100">
+
+            <HeaderL />
+
+            <div className="max-w-6xl mx-auto p-6 space-y-6">
+
+                {/* 🧾 FORMULARIO */}
+                <div className="bg-white rounded-2xl shadow-md p-6">
+
+                    <h2 className="text-2xl font-semibold text-gray-700 mb-6">
+                        Información del Procedimiento
+                    </h2>
+
+                    <form
+                        onSubmit={fncnavMosaico.handleSubmit}
+                        className="space-y-4"
+                    >
+
+                        <FormDivText
+                            nombre="nombre"
+                            titulo="Nombre"
+                            id="nombre"
+                            type="text"
+                            visuals={fncnavMosaico.visuales}
+                            value={fncnavMosaico.form.nombre}
+                            alcambio={fncnavMosaico.handleChange}
+                        />
+
+                        <FormDivText
+                            nombre="descripcion"
+                            titulo="Descripcion"
+                            id="descripcion"
+                            type="text"
+                            visuals={fncnavMosaico.visuales}
+                            value={fncnavMosaico.form.descripcion}
+                            alcambio={fncnavMosaico.handleChange}
+                        />
+
+                        <FormDivSelect
+                            nombre="categoria"
+                            titulo="Categoria"
+                            id="categoria_id"
+                            visuals={fncnavMosaico.visuales}
+                            value={fncnavMosaico.form.categoria_id}
+                            alcambio={fncnavMosaico.handleChange}
+                            iterador={fncnavMosaico.categorias}
+                            nombredesignado={"nombre"}
+                        />
+
+                        <div className="flex justify-end pt-4">
+                            <button
+                                type="submit"
+                                className="
+                                    bg-blue-600
+                                    hover:bg-blue-700
+                                    text-white
+                                    px-6
+                                    py-2
+                                    rounded-lg
+                                    transition
+                                    cursor-pointer
+                                "
+                            >
+                                Modificar
+                            </button>
+                            <button
+                                onClick={(id) => fncnavMosaico.eliminar(Number(id))}
+                                className="
+                                    bg-red-600
+                                    hover:bg-red-700
+                                    text-white
+                                    px-6
+                                    py-2
+                                    rounded-lg
+                                    transition
+                                    cursor-pointer
+                                "
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+
+                {/* 📌 TABS */}
+                <div className="bg-white rounded-2xl shadow-md overflow-hidden">
+
+                    <div className="flex border-b bg-gray-50">
+
+                        <TabButton
+                            label="Imágenes"
+                            active={fncnavMosaico.activeTab === "imagenes"}
+                            onClick={() =>
+                                fncnavMosaico.setActiveTab("imagenes")
+                            }
+                        />
+
+                        <TabButton
+                            label="Videos"
+                            active={fncnavMosaico.activeTab === "videos"}
+                            onClick={() =>
+                                fncnavMosaico.setActiveTab("videos")
+                            }
+                        />
+
+                        <TabButton
+                            label="Documentos"
+                            active={fncnavMosaico.activeTab === "documentos"}
+                            onClick={() =>
+                                fncnavMosaico.setActiveTab("documentos")
+                            }
+                        />
+
+                    </div>
+
+                    {/* 📂 CONTENIDO */}
+                    <div className="p-6">
+
+                        {/* 🖼️ IMÁGENES */}
+                        {fncnavMosaico.activeTab === "imagenes" && (
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                {fncnavMosaico.imagenes?.map((imagen: ImagenInterface, index: number) => (
+                                    <ImgMosaico key={index} imagen={imagen} index={index} />
+                                ))}
+                                <UploadImagenCard procedimientoId={Number(id)} onUpload={() => window.location.reload()}/>
+                            </div>
+                            
+
+                        )}
+
+                        {/* 🎥 VIDEOS */}
+                        {fncnavMosaico.activeTab === "videos" && (
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                {fncnavMosaico.videos?.map((video: VideoInterface, index: number) => (
+                                    <VidMosaico key={index} index={index} video={video}/>
+                                ))}
+                            </div>
+
+                        )}
+
+                        {/* 📄 DOCUMENTOS */}
+                        {fncnavMosaico.activeTab === "documentos" && (
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                                {fncnavMosaico.documentos?.map((documento: any, index: number) => (
+                                    <DocMosaico key={index} documento={documento} index={index} />
+                                ))}
+                            </div>
+
+                        )}
+
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
+    );
+}
+
+/* 🔘 BOTÓN TAB */
+function TabButton({
+    active,
+    onClick,
+    label
+}: any) {
+
+    return (
+        <button
+            onClick={onClick}
+            className={`
+                px-6
+                py-4
+                text-sm
+                font-semibold
+                transition
+                border-b-2
+                cursor-pointer
+                ${active
+                    ? "border-blue-600 text-blue-600 bg-white"
+                    : "border-transparent text-gray-500 hover:text-gray-700 hover:bg-gray-100"
+                }
+            `}
+        >
+            {label}
+        </button>
     );
 }

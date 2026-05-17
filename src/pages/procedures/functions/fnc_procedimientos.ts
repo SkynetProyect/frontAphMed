@@ -1,28 +1,59 @@
-import { use, useContext, useEffect, useState } from "react";
-import type SocketUpdateInterface from "../../../interfaces/SocketUpdateInterface";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { SocketContext } from "../../../components/hooks/socket-reducers/SocketContext";
 import ProcedimientoAdapter from "../../../services/ProcedimientoAdapter";
 import type CategoriaInterface from "../../../interfaces/CategoriaInterface";
 import type ProcedimientoInterface from "../../../interfaces/ProcedimientoInterface";
-import CategoriaAdapter from "../../../services/CategoriaAdapter copy";
+import CategoriaAdapter from "../../../services/CategoriaAdapter";
 
-export default function fnc_procedimientos(idpatient:number){
+export default function useProcedimientos(idpatient: number) {
     const { socket } = useContext(SocketContext).SocketState;
+
     const [procedimientos, setProcedimientos] = useState<ProcedimientoInterface[]>([]);
     const [categorias, setCategorias] = useState<CategoriaInterface[]>([]);
-    
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
-        new ProcedimientoAdapter().getAll().then((data) => {
-            setProcedimientos(data);
-        }); 
-        new CategoriaAdapter().getAll().then((data) => {
-            setCategorias(data);
-        }); 
-        socket!.on("procedure_update", (data: SocketUpdateInterface) => {
-            console.log("Received procedure update: "+data);
+        let isMounted = true;
+
+        setLoading(true);
+
+        Promise.all([
+            new ProcedimientoAdapter().getAll(),
+            new CategoriaAdapter().getAll()
+        ])
+        .then(([procedimientosData, categoriasData]) => {
+            if (!isMounted) return;
+
+            setProcedimientos(procedimientosData);
+            setCategorias(categoriasData);
+        })
+        .catch((error) => {
+            console.error("Error loading data:", error);
+        })
+        .finally(() => {
+            if (isMounted) setLoading(false);
         });
 
-    }, []);
+        return () => {
+            isMounted = false;
+        };
+    }, [idpatient]);
 
-    return {socket, procedimientos, setProcedimientos, categorias, setCategorias};
+    const categoriaMap = useMemo(() => {
+        return new Map(
+            categorias.map((categoria) => [
+                Number(categoria.id),
+                categoria
+            ])
+        );
+    }, [categorias]);
+
+    return {
+        socket,
+        procedimientos,
+        categorias,
+        categoriaMap,
+        loading,
+        isReady: !loading && categorias.length > 0
+    };
 }

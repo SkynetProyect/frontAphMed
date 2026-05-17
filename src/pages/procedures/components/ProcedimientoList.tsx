@@ -1,13 +1,13 @@
-import { useState } from "react";
+import useProcedimientoList from "../functions/fnc_procedimientoList";
 import type ProcedimientoInterface from "../../../interfaces/ProcedimientoInterface";
 import type CategoriaInterface from "../../../interfaces/CategoriaInterface";
 
-export default function ProcedimientoList({ procedimiento, categorias }: { procedimiento: ProcedimientoInterface; categorias: CategoriaInterface[] }) {
-    const [categoria, setOpen] = useState<CategoriaInterface>(categorias.find((cat) => cat.id === procedimiento.categoria_id) || { id: 0, nombre: "Sin categoria" });
-
+export default function ProcedimientoList({ procedimiento, categoriaName }: Readonly<{ procedimiento: ProcedimientoInterface; categoriaName: string }>) {
+    const fncprocedimientoList = useProcedimientoList({ procedimiento });
+    
     return (
 
-        <tr className="cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors">
+        <tr className="cursor-pointer border-b border-gray-100 hover:bg-gray-50 transition-colors" onClick={fncprocedimientoList.handleClick}>
 
             {/* procedimiento */}
             <td className="px-6 py-5">
@@ -40,7 +40,7 @@ export default function ProcedimientoList({ procedimiento, categorias }: { proce
             {/* categoria */}
             <td className="px-6 py-5">
                 <span className="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700">
-                    {categoria.nombre}
+                    {categoriaName}
                 </span>
             </td>
         </tr>

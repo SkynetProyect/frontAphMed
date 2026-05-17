@@ -1,4 +1,5 @@
 import { ShieldCheck, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function HeaderL() {
   return (
@@ -23,39 +24,7 @@ export default function HeaderL() {
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center gap-12">
-          <a
-            href="#"
-            className="text-gray-700 hover:text-slate-900 transition-colors font-medium"
-          >
-            pacientes
-          </a>
-          <a
-            href="#"
-            className="text-gray-700 hover:text-slate-900 transition-colors font-medium"
-          >
-            Funcionalidades
-          </a>
 
-          <a
-            href="#"
-            className="text-gray-700 hover:text-slate-900 transition-colors font-medium"
-          >
-            Nuestra Historia
-          </a>
-
-          <a
-            href="#"
-            className="text-gray-700 hover:text-slate-900 transition-colors font-medium"
-          >
-            Sobre Nosotros
-          </a>
-
-          <a
-            href="#"
-            className="text-gray-700 hover:text-slate-900 transition-colors font-medium"
-          >
-            Contacto
-          </a>
 
         </nav>
 

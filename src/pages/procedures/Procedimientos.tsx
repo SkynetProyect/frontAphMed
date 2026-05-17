@@ -1,41 +1,63 @@
+import { useParams } from "react-router-dom";
 import ProcedimientoList from "./components/ProcedimientoList";
-import fnc_procedimientos from "./functions/fnc_procedimientos";
+import useProcedimientos from "./functions/fnc_procedimientos";
+import HeaderL from "../../components/header/HeaderL";
+import CButton from "../../components/logics/CButton";
+import FormularioProcedimiento from "./forms/FormularioProcedimiento";
+import Popup from "reactjs-popup";
 
 
-export default function Procedimientos(){
-    
-    const fncprocedimientos = fnc_procedimientos(1);
+export default function Procedimientos({ idpatient }: Readonly<{ idpatient?: number }>) {
+    const params = useParams();
+    const patientId = idpatient ?? Number.parseInt(params.id ?? "0", 10);
+    //* react functions separated */
+    const fncprocedimientos = useProcedimientos(patientId);
+    console.log(fncprocedimientos.categorias);
+    //* variables with visual repetitive content */
+    const table_column_visuals = "px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500";
+    const table_main_visual = "min-w-full border-collapse";
 
     return (
-            <table className="min-w-full border-collapse">
+        <>
+        <HeaderL/>
+            <table className={table_main_visual}>
                 {/* Header */}
                 <thead className="bg-gray-50 border-b border-gray-200">
                     <tr>
-                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                        <th className={table_column_visuals}>
                             Nombre
                         </th>
 
-                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                        <th className={table_column_visuals}>
                             Descripcion
                         </th>
 
-                        <th className="px-6 py-4 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                        <th className={table_column_visuals}>
                             Categoria
                         </th>
                     </tr>
                 </thead>
 
                 {/* Body */}
-                <tbody className="divide-y divide-gray-100">
-                    {fncprocedimientos.procedimientos.map((procedimiento) => (
-                        <ProcedimientoList
-                            key={procedimiento.id}
-                            procedimiento={procedimiento}
-                            categorias={fncprocedimientos.categorias}
-                        />
-                    ))}
+                <tbody className="divide-y divide-gray-100  ">
+                    {
+                    fncprocedimientos.procedimientos.map((procedimiento) => {
+                        console.log(procedimiento)
+                        const categoryName = fncprocedimientos.categorias.find((cate) => cate.id == procedimiento.categoria_id)!.nombre;
+                        return (
+                            <ProcedimientoList 
+                                key={procedimiento.id}
+                                procedimiento={procedimiento}
+                                categoriaName={categoryName}
+                            />
+                        );
+                    })}
                 </tbody>
             </table>
-
+            <Popup trigger={<CButton text="Agregar" />} modal nested>
+                <FormularioProcedimiento id={patientId}/>
+            </Popup>
+            
+    </>
     );
 }

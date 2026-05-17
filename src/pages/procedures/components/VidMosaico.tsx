@@ -1,14 +1,33 @@
 
-import type VideoInterface from "../../logic/domain/interfaces/VideoInterface";
+import type VideoInterface from "../../../interfaces/VideoInterface";
 
-export default function VidMosaico({videos}: Readonly<{videos: VideoInterface[]}>) {
+export default function VidMosaico({video, index}: Readonly<{video: VideoInterface, index: number}>) {
     return (
-        <>
-        {videos.map((video: VideoInterface) => (
-            <div key={video.id}>
-                <video src={video.url} controls />
-            </div>
-        ))}
-        </>
+        <div
+            key={index}
+            className="
+                bg-gray-100
+                rounded-xl
+                overflow-hidden
+                shadow-sm
+                hover:shadow-lg
+                transition
+            "
+        >
+
+            <video
+                controls
+                className="
+                    w-full
+                    h-72
+                    bg-black
+                "
+            >
+                <source
+                    src={video.url}
+                />
+            </video>
+
+        </div>
     );
 }

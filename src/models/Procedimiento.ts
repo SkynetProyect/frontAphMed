@@ -5,7 +5,7 @@ import type VideoInterface from "../interfaces/VideoInterface";
 export default class Procedimiento {
     id?: number;
     nombre: string= "";
-    descripcion?: string = "";
+    descripcion: string = "";
     categoria_id: number = 0;
     paciente_id: number = 0;
     imagenes: ImagenInterface[] = [];

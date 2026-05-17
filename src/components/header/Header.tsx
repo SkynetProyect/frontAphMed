@@ -1,4 +1,5 @@
 import { ShieldCheck, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -24,21 +25,21 @@ export default function Header() {
         {/* Navigation */}
         <nav className="hidden md:flex items-center gap-12">
           <a
-            href="#"
+            href="#funcionalidades"
             className="text-gray-700 hover:text-slate-900 transition-colors font-medium"
           >
             Funcionalidades
           </a>
 
           <a
-            href="#"
+            href="#historia"
             className="text-gray-700 hover:text-slate-900 transition-colors font-medium"
           >
             Nuestra Historia
           </a>
 
           <a
-            href="#"
+            href="#nosotros"
             className="text-gray-700 hover:text-slate-900 transition-colors font-medium"
           >
             Sobre Nosotros
@@ -53,11 +54,16 @@ export default function Header() {
         </nav>
 
         {/* CTA */}
-        <button className="group flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-emerald-500 hover:opacity-90 transition-all text-white font-semibold px-6 py-3 rounded-xl shadow-lg">
-          Iniciar Sesión
+        <Link to="/login_user" className="group flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-emerald-500 hover:opacity-90 transition-all text-white font-semibold px-6 py-3 rounded-xl shadow-lg">
+          Soy paciente
 
           <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-        </button>
+        </Link>
+        <Link to="/login_doctor" className="group flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-emerald-500 hover:opacity-90 transition-all text-white font-semibold px-6 py-3 rounded-xl shadow-lg">
+          Soy doctor
+
+        <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+        </Link>
       </div>
     </header>
   );

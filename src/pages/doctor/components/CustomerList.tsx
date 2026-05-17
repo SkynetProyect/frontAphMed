@@ -69,7 +69,7 @@ export default function CustomerList({ paciente }: { paciente: PacienteInterface
                     `}
                 >
 
-                    {open && (<Procedimientos />)}
+                    {open && (<Procedimientos idpatient={paciente?.id || 0} />)}
                     </div>
                 </td>
             </tr>

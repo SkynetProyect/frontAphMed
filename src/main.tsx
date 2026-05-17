@@ -1,13 +1,22 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
-import SocketContextComponent from './components/hooks/socket-reducers/Component'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+
+import './index.css';
+
+import SocketContextComponent
+from './components/hooks/socket-reducers/Component';
+
+import AppRouter from './router';
 
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <SocketContextComponent>
-      <App />
-    </SocketContextComponent>
-  </StrictMode>,
-)
+
+    <StrictMode>
+
+        <SocketContextComponent>
+
+            <AppRouter />
+
+        </SocketContextComponent>
+
+    </StrictMode>
+);

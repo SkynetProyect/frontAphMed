@@ -1,12 +1,25 @@
 import { useEffect, useRef } from "react";
 import videoBg from "../../../public/mainescene.mp4";
 import FormularioRegister from "./forms/FormularioRegister";
+import useCreatePacient from "./functions/fnc_createPacient";
+import type PacienteInterface from "../../interfaces/PacienteInterface";
+import { useNavigate } from "react-router-dom";
 import createPacient from "./functions/fnc_createPacient";
 
 export default function Register() {
 
     const videoRef = useRef<HTMLVideoElement>(null);
+    const navigate = useNavigate();
 
+        const handleCreatePacient =
+        async (form: PacienteInterface) => {
+
+            await createPacient(
+                form,
+                navigate
+            );
+
+        };
     useEffect(() => {
 
         const video = videoRef.current;
@@ -81,7 +94,7 @@ export default function Register() {
 
             <div className="flex justify-center items-center w-full h-full">
 
-                <FormularioRegister fnc={createPacient}/>
+                <FormularioRegister fnc={handleCreatePacient}/>
 
             </div>
 
