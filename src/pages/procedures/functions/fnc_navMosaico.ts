@@ -21,9 +21,9 @@ export default function useNavMosaico(procedimientoId: number, navigator: Naviga
         adapter.update(formulario);
         navigator(0);
     }
-    const [imagenes, setImagenes] = useState<ImagenInterface[]>();
-    const [videos, setVideos] = useState<VideoInterface[]>();
-    const [documentos, setDocumentos] = useState<DocumentoInterface[]>();
+    const [imagenes, setImagenes] = useState<ImagenInterface[]>([]);
+    const [videos, setVideos] = useState<VideoInterface[]>([]);
+    const [documentos, setDocumentos] = useState<DocumentoInterface[]>([]);
 
     const {form, setForm, handleChange, handleSubmit} = useForm<ProcedimientoInterface>(Procedimiento, actualizar);
     const [categorias, setCategorias] = useState<CategoriaInterface[]>([]);

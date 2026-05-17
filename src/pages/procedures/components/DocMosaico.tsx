@@ -2,25 +2,36 @@ import { useNavigate } from "react-router-dom";
 import type DocumentoInterface from "../../../interfaces/DocumentoInterface";
 import DocumentoAdapter from "../../../services/DocumentoAdapter";
 
-export default function DocMosaico({objeto, index}: Readonly<{objeto: DocumentoInterface, index: number}>) {
+export default function DocMosaico({
+    objeto,
+    index
+}: Readonly<{
+    objeto: DocumentoInterface,
+    index: number
+}>) {
+
     const adapter = new DocumentoAdapter();
+
     const navigate = useNavigate();
+
     return (
+
         <div
             key={index}
             className="
                 group
-                bg-gray-100
+                bg-white
                 rounded-xl
                 overflow-hidden
                 shadow-sm
                 hover:shadow-lg
                 transition
                 relative
+                border
             "
         >
 
-            {/* 🔗 CLICK PARA ABRIR */}
+            {/* 📄 PREVIEW PDF */}
             <a
                 href={objeto.url}
                 target="_blank"
@@ -28,13 +39,19 @@ export default function DocMosaico({objeto, index}: Readonly<{objeto: DocumentoI
                 className="block"
             >
 
-        <div className="text-5xl">
-            📄
-        </div>
+                <iframe
+                    src={`${objeto.url}#toolbar=0`}
+                    title={`documento-${index}`}
+                    className="
+                        w-full
+                        h-64
+                        pointer-events-none
+                    "
+                />
 
-       </a>
+            </a>
 
-            {/* 🗑 BOTÓN ELIMINAR (SOLO UI) */}
+            {/* 🗑 ELIMINAR */}
             <button
                 className="
                     absolute
@@ -50,15 +67,18 @@ export default function DocMosaico({objeto, index}: Readonly<{objeto: DocumentoI
                     group-hover:opacity-100
                     transition
                 "
-                onClick={() => {
-                    adapter.delete(objeto.id!);
+                onClick={async () => {
+
+                    await adapter.delete(objeto.id!);
+
                     navigate(0);
 
-                 }}
+                }}
             >
                 Eliminar
             </button>
 
         </div>
+
     );
 }

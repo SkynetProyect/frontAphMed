@@ -28,7 +28,7 @@ export default class VideoAdapter {
     }
 
     create(
-        imagen: VideoInterface,
+        video: VideoInterface,
         file: File
     ): Promise<VideoInterface> {
 
@@ -40,10 +40,10 @@ export default class VideoAdapter {
         // 📌 objeto como JSON string
         formData.append(
             "data",
-            JSON.stringify(imagen)
+            JSON.stringify(video)
         );
 
-        return fetch(`${backroute}/imagenes`, {
+        return fetch(`${backroute}/videos`, {
             method: "POST",
             headers: getAuthHeaders(),
             body: formData
@@ -58,7 +58,7 @@ export default class VideoAdapter {
             if (data.codigo != 201) {
                 alert(`Error: ${data.mensaje}`);
             }
-
+            alert('Subida correctamente');
             return data.data;
         })
         .catch(error => {
@@ -98,7 +98,7 @@ export default class VideoAdapter {
     }
 
     getByProcedimiento(id:number): Promise<VideoInterface[]>{
-        return fetch(`${backroute}/imagenes/byProcedimiento/${id}`, {
+        return fetch(`${backroute}/videos/byProcedimiento/${id}`, {
             headers: getAuthHeaders()
         })
         .then(response => response.json())
@@ -110,7 +110,7 @@ export default class VideoAdapter {
     }
 
     deleteByProcedimiento(id:number): Promise<Object>{
-        return fetch(`${backroute}/imagenes/byProcedimiento/${id}`, {
+        return fetch(`${backroute}/videos/byProcedimiento/${id}`, {
             method: 'DELETE',
             headers: getAuthHeaders()
         })

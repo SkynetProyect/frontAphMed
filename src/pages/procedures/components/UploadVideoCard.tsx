@@ -29,10 +29,7 @@ export default function UploadVideoCard({
 
             setLoading(true);
 
-            const response = adapter.create( videoData,file);
-            
-
-            alert("Video subida correctamente");
+            const response = await adapter.create( videoData,file);
 
             /* 🔄 callback opcional */
             onUpload?.();
@@ -95,7 +92,7 @@ export default function UploadVideoCard({
 
             <input
                 type="file"
-                accept="image/*"
+                accept="video/*"
                 className="hidden"
                 onChange={subirVideo}
                 disabled={loading}

@@ -1,7 +1,9 @@
 import { ShieldCheck, ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
+import { removeAuthToken } from "../../guards/token";
 
 export default function HeaderL() {
+  const navigate = useNavigate();
   return (
     <header className="w-full bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
@@ -29,7 +31,12 @@ export default function HeaderL() {
         </nav>
 
         {/* CTA */}
-        <button className="group flex items-center gap-3 bg-gradient-to-r from-red-600 to-emerald-500 hover:opacity-90 transition-all text-white font-semibold px-6 py-3 rounded-xl shadow-lg">
+        <button className="group flex items-center gap-3 bg-gradient-to-r from-red-600 to-emerald-500 hover:opacity-90 transition-all text-white font-semibold px-6 py-3 rounded-xl shadow-lg"
+          onClick={() =>{
+            removeAuthToken();
+            navigate(0);
+            
+          }}>
           Cerrar Sesión
 
           <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />

@@ -58,7 +58,7 @@ export default class ImagenAdapter {
             if (data.codigo != 201) {
                 alert(`Error: ${data.mensaje}`);
             }
-
+            alert('Subida correctamente');
             return data.data;
         })
         .catch(error => {

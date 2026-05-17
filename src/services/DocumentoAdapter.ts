@@ -43,7 +43,7 @@ export default class DocumentoAdapter {
             JSON.stringify(imagen)
         );
 
-        return fetch(`${backroute}/imagenes`, {
+        return fetch(`${backroute}/documentos`, {
             method: "POST",
             headers: getAuthHeaders(),
             body: formData
@@ -58,7 +58,7 @@ export default class DocumentoAdapter {
             if (data.codigo != 201) {
                 alert(`Error: ${data.mensaje}`);
             }
-
+            alert('Subida correctamente');
             return data.data;
         })
         .catch(error => {
@@ -98,7 +98,7 @@ export default class DocumentoAdapter {
     }
 
     getByProcedimiento(id:number): Promise<DocumentoInterface[]>{
-        return fetch(`${backroute}/imagenes/byProcedimiento/${id}`, {
+        return fetch(`${backroute}/documentos/byProcedimiento/${id}`, {
             headers: getAuthHeaders()
         })
         .then(response => response.json())
@@ -110,7 +110,7 @@ export default class DocumentoAdapter {
     }
 
     deleteByProcedimiento(id:number): Promise<Object>{
-        return fetch(`${backroute}/imagenes/byProcedimiento/${id}`, {
+        return fetch(`${backroute}/documentos/byProcedimiento/${id}`, {
             method: 'DELETE',
             headers: getAuthHeaders()
         })

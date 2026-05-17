@@ -29,10 +29,8 @@ export default function UploadImagenCard({
 
             setLoading(true);
 
-            const response = adapter.create( imagenData,file);
-            
-
-            alert("Imagen subida correctamente");
+            const response = await adapter.create( imagenData,file);
+        
 
             /* 🔄 callback opcional */
             onUpload?.();

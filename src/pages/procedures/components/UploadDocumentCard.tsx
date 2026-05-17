@@ -29,10 +29,8 @@ export default function UploadDocumentCard({
 
             setLoading(true);
 
-            const response = adapter.create( documentoData, file);
+            const response = await adapter.create( documentoData, file);
             
-
-            alert("Documento subida correctamente");
 
             /* 🔄 callback opcional */
             onUpload?.();
