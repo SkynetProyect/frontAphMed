@@ -28,8 +28,12 @@ export default function useNavMosaico(procedimientoId: number, navigator: Naviga
     const {form, setForm, handleChange, handleSubmit} = useForm<ProcedimientoInterface>(Procedimiento, actualizar);
     const [categorias, setCategorias] = useState<CategoriaInterface[]>([]);
     const visuales:string ="p-1 m-1 w-full bg-cyan-100 text-center rounded-lg";
-    const eliminar = (id: number) => {
-
+    const eliminar = () => {
+        new ImagenAdapter().deleteByProcedimiento(procedimientoId);
+        new VideoAdapter().deleteByProcedimiento(procedimientoId);
+        new DocumentoAdapter().deleteByProcedimiento(procedimientoId);
+        adapter.delete(procedimientoId);
+        navigator("/procedimientos/"+form.paciente_id);
     }
 
     useEffect(() => {

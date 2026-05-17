@@ -1,9 +1,12 @@
 import type CategoriaInterface from "../interfaces/CategoriaInterface";
 import backroute from "../enviroments/enviroment";
+import { getAuthHeaders } from "../guards/token";
 
 export default class CategoriaAdapter {
     getAll(): Promise<Array<CategoriaInterface>> {
-        return fetch(`${backroute}/categorias`)
+        return fetch(`${backroute}/categorias`, {
+            headers: getAuthHeaders()
+        })
             .then(response => response.json())
             .then((data: { data: CategoriaInterface[] }) => data.data)
             .catch(error => {
@@ -13,7 +16,9 @@ export default class CategoriaAdapter {
     }
 
     getById(id: number): Promise<CategoriaInterface> {
-        return fetch(`${backroute}/categorias/${id}`)
+        return fetch(`${backroute}/categorias/${id}`, {
+            headers: getAuthHeaders()
+        })
             .then(response => response.json())
             .then((data: { data: CategoriaInterface }) => data.data)
             .catch(error => {
@@ -26,9 +31,9 @@ export default class CategoriaAdapter {
         console.log('Creating Categoria:', categoria);
         return fetch(`${backroute}/categorias`, {
             method: 'POST',
-            headers: {
+            headers: getAuthHeaders({
                 'Content-Type': 'application/json'
-            },
+            }),
             body: JSON.stringify(categoria)
         })
             .then(response => response.json())
@@ -45,9 +50,9 @@ export default class CategoriaAdapter {
     update(categoria: CategoriaInterface): Promise<CategoriaInterface> {
         return fetch(`${backroute}/categorias`, {
             method: 'PUT',
-            headers: {
+            headers: getAuthHeaders({
                 'Content-Type': 'application/json'
-            },
+            }),
             body: JSON.stringify(categoria)
         })
             .then(response => response.json())
@@ -60,7 +65,8 @@ export default class CategoriaAdapter {
 
     delete(id: number): Promise<void> {
         return fetch(`${backroute}/categorias/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: getAuthHeaders()
         })
             .then(() => {
                 return;

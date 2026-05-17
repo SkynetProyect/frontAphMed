@@ -1,10 +1,13 @@
 import type ProcedimientoInterface from "../interfaces/ProcedimientoInterface";
 import backroute from "../enviroments/enviroment";
+import { getAuthHeaders } from "../guards/token";
 
 export default class ProcedimientoAdapter{
     
     getAll(): Promise<Array<ProcedimientoInterface>> {
-        return fetch(backroute + '/procedimientos')
+        return fetch(backroute + '/procedimientos', {
+            headers: getAuthHeaders()
+        })
         .then(response => response.json())
         .then((data: { data: ProcedimientoInterface[] }) => {
                     return data.data;
@@ -16,7 +19,9 @@ export default class ProcedimientoAdapter{
     }
 
     getById(id: number): Promise<ProcedimientoInterface> {
-        return fetch(`${backroute}/procedimientos/${id}`)
+        return fetch(`${backroute}/procedimientos/${id}`, {
+            headers: getAuthHeaders()
+        })
         .then(response => response.json())
         .then((data: { data: ProcedimientoInterface }) => {
             return data.data;
@@ -31,9 +36,9 @@ export default class ProcedimientoAdapter{
         console.log('Creating Procedimiento:', paciente);
         return fetch(`${backroute}/procedimientos`, {
             method: 'POST',
-            headers: {
+            headers: getAuthHeaders({
                 'Content-Type': 'application/json'
-            },
+            }),
             body: JSON.stringify(paciente)
         })
         .then(response => response.json())
@@ -50,9 +55,9 @@ export default class ProcedimientoAdapter{
     update(paciente: ProcedimientoInterface): Promise<ProcedimientoInterface> {
         return fetch(`${backroute}/procedimientos/`, {
             method: 'PUT',
-            headers: {
+            headers: getAuthHeaders({
                 'Content-Type': 'application/json'
-            },
+            }),
             body: JSON.stringify(paciente)
         })
         .then(response => response.json())
@@ -67,7 +72,8 @@ export default class ProcedimientoAdapter{
 
     delete(id: number): Promise<void> {
         return fetch(`${backroute}/procedimientos/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: getAuthHeaders()
         })
         .then(() => {
             return;
@@ -79,7 +85,9 @@ export default class ProcedimientoAdapter{
     }
 
     getByPaciente(paciente_id: number): Promise<Array<ProcedimientoInterface>> {
-        return fetch(`${backroute}/procedimientos/paciente/${paciente_id}`)
+        return fetch(`${backroute}/procedimientos/paciente/${paciente_id}`, {
+            headers: getAuthHeaders()
+        })
         .then(response => response.json())
         .then((data: { data: ProcedimientoInterface[] }) => {
             return data.data;

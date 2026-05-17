@@ -1,9 +1,12 @@
 import type VideoInterface from "../interfaces/VideoInterface";
 import backroute from "../enviroments/enviroment";
+import { getAuthHeaders } from "../guards/token";
 
 export default class VideoAdapter {
     getAll(): Promise<Array<VideoInterface>> {
-        return fetch(`${backroute}/videos`)
+        return fetch(`${backroute}/videos`, {
+            headers: getAuthHeaders()
+        })
             .then(response => response.json())
             .then((data: { data: VideoInterface[] }) => data.data)
             .catch(error => {
@@ -13,7 +16,9 @@ export default class VideoAdapter {
     }
 
     getById(id: number): Promise<VideoInterface> {
-        return fetch(`${backroute}/videos/${id}`)
+        return fetch(`${backroute}/videos/${id}`, {
+            headers: getAuthHeaders()
+        })
             .then(response => response.json())
             .then((data: { data: VideoInterface }) => data.data)
             .catch(error => {
@@ -22,32 +27,52 @@ export default class VideoAdapter {
             });
     }
 
-    create(video: VideoInterface): Promise<VideoInterface> {
-        console.log('Creating Video:', video);
-        return fetch(`${backroute}/videos`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(video)
+    create(
+        imagen: VideoInterface,
+        file: File
+    ): Promise<VideoInterface> {
+
+        const formData = new FormData();
+
+        // 📌 archivo
+        formData.append("file", file);
+
+        // 📌 objeto como JSON string
+        formData.append(
+            "data",
+            JSON.stringify(imagen)
+        );
+
+        return fetch(`${backroute}/imagenes`, {
+            method: "POST",
+            headers: getAuthHeaders(),
+            body: formData
         })
-            .then(response => response.json())
-            .then((data: { data: VideoInterface, codigo: number, mensaje: string }) => {
-                data['codigo'] != 201 && alert(`Error creating Video: ${JSON.stringify(data.mensaje)}`);
-                return data.data;
-            })
-            .catch(error => {
-                console.error('Error creating Video:', error);
-                throw error;
-            });
+        .then(res => res.json())
+        .then((data: {
+            data: VideoInterface,
+            codigo: number,
+            mensaje: string
+        }) => {
+
+            if (data.codigo != 201) {
+                alert(`Error: ${data.mensaje}`);
+            }
+
+            return data.data;
+        })
+        .catch(error => {
+            console.error("Error creating VideoInt error");
+            throw error;
+        });
     }
 
     update(video: VideoInterface): Promise<VideoInterface> {
         return fetch(`${backroute}/videos`, {
             method: 'PUT',
-            headers: {
+            headers: getAuthHeaders({
                 'Content-Type': 'application/json'
-            },
+            }),
             body: JSON.stringify(video)
         })
             .then(response => response.json())
@@ -60,7 +85,8 @@ export default class VideoAdapter {
 
     delete(id: number): Promise<void> {
         return fetch(`${backroute}/videos/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: getAuthHeaders()
         })
             .then(() => {
                 return;
@@ -72,9 +98,24 @@ export default class VideoAdapter {
     }
 
     getByProcedimiento(id:number): Promise<VideoInterface[]>{
-        return fetch(`${backroute}/imagenes/byProcedimiento/${id}`)
+        return fetch(`${backroute}/imagenes/byProcedimiento/${id}`, {
+            headers: getAuthHeaders()
+        })
         .then(response => response.json())
         .then((data: { data: VideoInterface[] }) => data.data)
+        .catch(error => {
+            console.error(`Error fetching Imagen with id ${id}:`, error);
+            throw error;
+        });
+    }
+
+    deleteByProcedimiento(id:number): Promise<Object>{
+        return fetch(`${backroute}/imagenes/byProcedimiento/${id}`, {
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        })
+        .then(response => response.json())
+        .then((data: { data: boolean }) => data.data)
         .catch(error => {
             console.error(`Error fetching Imagen with id ${id}:`, error);
             throw error;

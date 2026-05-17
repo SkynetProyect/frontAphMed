@@ -1,9 +1,12 @@
 import type DocumentoInterface from "../interfaces/DocumentoInterface";
 import backroute from "../enviroments/enviroment";
+import { getAuthHeaders } from "../guards/token";
 
 export default class DocumentoAdapter {
     getAll(): Promise<Array<DocumentoInterface>> {
-        return fetch(`${backroute}/documentos`)
+        return fetch(`${backroute}/documentos`, {
+            headers: getAuthHeaders()
+        })
             .then(response => response.json())
             .then((data: { data: DocumentoInterface[] }) => data.data)
             .catch(error => {
@@ -13,7 +16,9 @@ export default class DocumentoAdapter {
     }
 
     getById(id: number): Promise<DocumentoInterface> {
-        return fetch(`${backroute}/documentos/${id}`)
+        return fetch(`${backroute}/documentos/${id}`, {
+            headers: getAuthHeaders()
+        })
             .then(response => response.json())
             .then((data: { data: DocumentoInterface }) => data.data)
             .catch(error => {
@@ -22,32 +27,52 @@ export default class DocumentoAdapter {
             });
     }
 
-    create(documento: DocumentoInterface): Promise<DocumentoInterface> {
-        console.log('Creating Documento:', documento);
-        return fetch(`${backroute}/documentos`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(documento)
+    create(
+        imagen: DocumentoInterface,
+        file: File
+    ): Promise<DocumentoInterface> {
+
+        const formData = new FormData();
+
+        // 📌 archivo
+        formData.append("file", file);
+
+        // 📌 objeto como JSON string
+        formData.append(
+            "data",
+            JSON.stringify(imagen)
+        );
+
+        return fetch(`${backroute}/imagenes`, {
+            method: "POST",
+            headers: getAuthHeaders(),
+            body: formData
         })
-            .then(response => response.json())
-            .then((data: { data: DocumentoInterface, codigo: number, mensaje: string }) => {
-                data['codigo'] != 201 && alert(`Error creating Documento: ${JSON.stringify(data.mensaje)}`);
-                return data.data;
-            })
-            .catch(error => {
-                console.error('Error creating Documento:', error);
-                throw error;
-            });
+        .then(res => res.json())
+        .then((data: {
+            data: DocumentoInterface,
+            codigo: number,
+            mensaje: string
+        }) => {
+
+            if (data.codigo != 201) {
+                alert(`Error: ${data.mensaje}`);
+            }
+
+            return data.data;
+        })
+        .catch(error => {
+            console.error("Error creating DocumentoInt error");
+            throw error;
+        });
     }
 
     update(documento: DocumentoInterface): Promise<DocumentoInterface> {
         return fetch(`${backroute}/documentos`, {
             method: 'PUT',
-            headers: {
+            headers: getAuthHeaders({
                 'Content-Type': 'application/json'
-            },
+            }),
             body: JSON.stringify(documento)
         })
             .then(response => response.json())
@@ -60,7 +85,8 @@ export default class DocumentoAdapter {
 
     delete(id: number): Promise<void> {
         return fetch(`${backroute}/documentos/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: getAuthHeaders()
         })
             .then(() => {
                 return;
@@ -72,11 +98,26 @@ export default class DocumentoAdapter {
     }
 
     getByProcedimiento(id:number): Promise<DocumentoInterface[]>{
-        return fetch(`${backroute}/imagenes/byProcedimiento/${id}`)
+        return fetch(`${backroute}/imagenes/byProcedimiento/${id}`, {
+            headers: getAuthHeaders()
+        })
         .then(response => response.json())
         .then((data: { data: DocumentoInterface[] }) => data.data)
         .catch(error => {
-            console.error(`Error fetching Imagen with id ${id}:`, error);
+            console.error(`Error fetching DocumentoIntth id ${id}:`, error);
+            throw error;
+        });
+    }
+
+    deleteByProcedimiento(id:number): Promise<Object>{
+        return fetch(`${backroute}/imagenes/byProcedimiento/${id}`, {
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        })
+        .then(response => response.json())
+        .then((data: { data: boolean }) => data.data)
+        .catch(error => {
+            console.error(`Error fetching DocumentoIntth id ${id}:`, error);
             throw error;
         });
     }

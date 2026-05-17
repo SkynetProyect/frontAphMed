@@ -10,6 +10,8 @@ import type VideoInterface from "../../../interfaces/VideoInterface";
 import type ImagenInterface from "../../../interfaces/ImagenInterface";
 import DocMosaico from "./DocMosaico";
 import UploadImagenCard from "./UploadImagenCard";
+import UploadVideoCard from "./UploadVideoCard";
+import UploadDocumentCard from "./UploadDocumentCard";
 
 export default function NavMosaico() {
 
@@ -85,7 +87,7 @@ export default function NavMosaico() {
                                 Modificar
                             </button>
                             <button
-                                onClick={(id) => fncnavMosaico.eliminar(Number(id))}
+                                onClick={fncnavMosaico.eliminar}
                                 className="
                                     bg-red-600
                                     hover:bg-red-700
@@ -143,7 +145,7 @@ export default function NavMosaico() {
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                                 {fncnavMosaico.imagenes?.map((imagen: ImagenInterface, index: number) => (
-                                    <ImgMosaico key={index} imagen={imagen} index={index} />
+                                    <ImgMosaico key={index} objeto={imagen} index={index} />
                                 ))}
                                 <UploadImagenCard procedimientoId={Number(id)} onUpload={() => window.location.reload()}/>
                             </div>
@@ -156,8 +158,9 @@ export default function NavMosaico() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {fncnavMosaico.videos?.map((video: VideoInterface, index: number) => (
-                                    <VidMosaico key={index} index={index} video={video}/>
+                                    <VidMosaico key={index} index={index} objeto={video}/>
                                 ))}
+                                < UploadVideoCard procedimientoId={Number(id)} onUpload={() => window.location.reload()} />
                             </div>
 
                         )}
@@ -167,8 +170,9 @@ export default function NavMosaico() {
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                                 {fncnavMosaico.documentos?.map((documento: any, index: number) => (
-                                    <DocMosaico key={index} documento={documento} index={index} />
+                                    <DocMosaico key={index} objeto={documento} index={index} />
                                 ))}
+                                < UploadDocumentCard procedimientoId={Number(id)} onUpload={() => window.location.reload()} />
                             </div>
 
                         )}

@@ -1,14 +1,17 @@
+import { useNavigate } from "react-router-dom";
 import type ImagenInterface from "../../../interfaces/ImagenInterface";
+import ImagenAdapter from "../../../services/ImagenAdapter";
 
 
 export default function ImgMosaico({
-    imagen,
+    objeto,
     index
 }: Readonly<{
-    imagen: ImagenInterface,
+    objeto: ImagenInterface,
     index: number
 }>) {
-
+    const navigate = useNavigate();
+    const adapter = new ImagenAdapter();
     return (
 
         <div
@@ -27,14 +30,14 @@ export default function ImgMosaico({
 
             {/* 🔗 CLICK PARA ABRIR */}
             <a
-                href={imagen.url}
+                href={objeto.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block"
             >
 
                 <img
-                    src={imagen.url}
+                    src={objeto.url}
                     alt={`imagen-${index}`}
                     className="
                         w-full
@@ -64,7 +67,11 @@ export default function ImgMosaico({
                     group-hover:opacity-100
                     transition
                 "
-                onClick={() => console.log("borrado")}
+                onClick={() => {
+                    adapter.delete(objeto.id!);
+                    navigate(0);
+
+                 }}
             >
                 Eliminar
             </button>

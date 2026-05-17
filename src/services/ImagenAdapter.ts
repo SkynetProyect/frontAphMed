@@ -1,9 +1,12 @@
 import type ImagenInterface from "../interfaces/ImagenInterface";
 import backroute from "../enviroments/enviroment";
+import { getAuthHeaders } from "../guards/token";
 
 export default class ImagenAdapter {
     getAll(): Promise<Array<ImagenInterface>> {
-        return fetch(`${backroute}/imagenes`)
+        return fetch(`${backroute}/imagenes`, {
+            headers: getAuthHeaders()
+        })
             .then(response => response.json())
             .then((data: { data: ImagenInterface[] }) => data.data)
             .catch(error => {
@@ -13,7 +16,9 @@ export default class ImagenAdapter {
     }
 
     getById(id: number): Promise<ImagenInterface> {
-        return fetch(`${backroute}/imagenes/${id}`)
+        return fetch(`${backroute}/imagenes/${id}`, {
+            headers: getAuthHeaders()
+        })
             .then(response => response.json())
             .then((data: { data: ImagenInterface }) => data.data)
             .catch(error => {
@@ -40,6 +45,7 @@ export default class ImagenAdapter {
 
         return fetch(`${backroute}/imagenes`, {
             method: "POST",
+            headers: getAuthHeaders(),
             body: formData
         })
         .then(res => res.json())
@@ -64,9 +70,9 @@ export default class ImagenAdapter {
     update(imagen: ImagenInterface): Promise<ImagenInterface> {
         return fetch(`${backroute}/imagenes`, {
             method: 'PUT',
-            headers: {
+            headers: getAuthHeaders({
                 'Content-Type': 'application/json'
-            },
+            }),
             body: JSON.stringify(imagen)
         })
             .then(response => response.json())
@@ -79,7 +85,8 @@ export default class ImagenAdapter {
 
     delete(id: number): Promise<void> {
         return fetch(`${backroute}/imagenes/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: getAuthHeaders()
         })
             .then(() => {
                 return;
@@ -91,11 +98,26 @@ export default class ImagenAdapter {
     }
 
     getByProcedimiento(procedimientoId:number): Promise<ImagenInterface[]>{
-        return fetch(`${backroute}/imagenes/byProcedimiento/${procedimientoId}`)
+        return fetch(`${backroute}/imagenes/byProcedimiento/${procedimientoId}`, {
+            headers: getAuthHeaders()
+        })
         .then(response => response.json())
         .then((data: { data: ImagenInterface[] }) => data.data)
         .catch(error => {
             console.error(`Error fetching Imagen with id ${procedimientoId}:`, error);
+            throw error;
+        });
+    }
+
+    deleteByProcedimiento(id:number): Promise<Object>{
+        return fetch(`${backroute}/imagenes/byProcedimiento/${id}`, {
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        })
+        .then(response => response.json())
+        .then((data: { data: boolean }) => data.data)
+        .catch(error => {
+            console.error(`Error fetching Imagen with id ${id}:`, error);
             throw error;
         });
     }

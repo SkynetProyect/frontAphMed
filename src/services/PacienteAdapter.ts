@@ -1,11 +1,22 @@
 import type PacienteInterface from "../interfaces/PacienteInterface";
 import backroute from "../enviroments/enviroment";
-import Paciente from "../models/Paciente";
+import { getAuthHeaders, setAuthToken } from "../guards/token";
+
+type LoginResponse = {
+    codigo: number;
+    mensaje: string;
+    data: {
+        paciente: PacienteInterface;
+        token: string;
+    } | null;
+};
 
 export default class PacienteAdapter{
     
     getAll(): Promise<Array<PacienteInterface>> {
-        return fetch(backroute + '/pacientes')
+        return fetch(backroute + '/pacientes', {
+            headers: getAuthHeaders()
+        })
         .then(response => response.json())
         .then((data: { data: PacienteInterface[] }) => {
                     return data.data;
@@ -17,7 +28,9 @@ export default class PacienteAdapter{
     }
 
     getById(id: number): Promise<PacienteInterface> {
-        return fetch(`${backroute}/pacientes/${id}`)
+        return fetch(`${backroute}/pacientes/${id}`, {
+            headers: getAuthHeaders()
+        })
         .then(response => response.json())
         .then((data: { data: PacienteInterface }) => {
             return data.data;
@@ -32,9 +45,9 @@ export default class PacienteAdapter{
         console.log('Creating Paciente:', paciente);
         return fetch(`${backroute}/pacientes`, {
             method: 'POST',
-            headers: {
+            headers: getAuthHeaders({
                 'Content-Type': 'application/json'
-            },
+            }),
             body: JSON.stringify(paciente)
         })
         .then(response => response.json())
@@ -51,9 +64,9 @@ export default class PacienteAdapter{
     update(paciente: PacienteInterface): Promise<PacienteInterface> {
         return fetch(`${backroute}/pacientes/`, {
             method: 'PUT',
-            headers: {
+            headers: getAuthHeaders({
                 'Content-Type': 'application/json'
-            },
+            }),
             body: JSON.stringify(paciente)
         })
         .then(response => response.json())
@@ -68,7 +81,8 @@ export default class PacienteAdapter{
 
     delete(id: number): Promise<void> {
         return fetch(`${backroute}/pacientes/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: getAuthHeaders()
         })
         .then(() => {
             return;
@@ -79,7 +93,7 @@ export default class PacienteAdapter{
         });
     }
 
-    login(identificacion: string, password: string): Promise<{ data: PacienteInterface, codigo: number, mensaje: string } > {
+    login(identificacion: string, password: string): Promise<LoginResponse> {
         return fetch(`${backroute}/pacientes/login`, {
             method: 'POST',
             headers: {
@@ -88,14 +102,9 @@ export default class PacienteAdapter{
             body: JSON.stringify({ identificacion, password })
         })
         .then(response => response.json())
-        .then((data: { data: PacienteInterface, codigo: number, mensaje: string }) => {
-            if(data.codigo == 401){
-                console.log(`credenciales invalidas`);
-                return data;
-            }
-            else if(data.codigo != 200){
-                console.log(`Error during login: ${JSON.stringify(data.mensaje)}`);
-                return data;
+        .then((data: LoginResponse) => {
+            if (data.codigo === 200 && data.data?.token) {
+                setAuthToken(data.data.token);
             }
             return data;
         })

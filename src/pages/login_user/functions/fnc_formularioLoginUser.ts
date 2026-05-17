@@ -5,7 +5,7 @@ import Login from "../../../models/Login";
 import useForm from "../../../components/hooks/useForm";
 import type TypeccInterface from "../../../interfaces/TypeccInterface";
 import { useEffect, useState } from "react";
-import PacienteAdapter from "../../../services/PacienteAdapter";
+import { loginWithBearer } from "../../../guards/auth";
 import { useNavigate } from "react-router-dom";
 
 export default function fnc_formularioLoginUser() {
@@ -13,15 +13,13 @@ export default function fnc_formularioLoginUser() {
     const [ errores, setErrores ] = useState<String []>([]);
     const iniciarsesion = (login: Login) => {
         console.log("Login data:", login);
-        new PacienteAdapter().login(login.identificacion, login.clave).then((response) => {
-            if (response.codigo == 200) {
-                navigate("/procedimientos/"+response.data.id); 
-            }
-            else{
+        loginWithBearer(login.identificacion, login.clave).then((response) => {
+            if (response.codigo === 200 && response.data?.paciente?.id) {
+                navigate("/procedimientos/" + response.data.paciente.id);
+            } else {
                 setErrores([response.mensaje]);
             }
         });
-        
     }
 
     const {form, setForm, handleChange, handleSubmit} = useForm<LoginInterface>(Login,iniciarsesion);
