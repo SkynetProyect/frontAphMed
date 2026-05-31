@@ -9,7 +9,7 @@ import Header from "./components/header/Header";
 import HeaderL from "./components/header/HeaderL";
 import NavMosaico from "./pages/procedures/components/NavMosaico";
 import Procedimientos from "./pages/procedures/Procedimientos";
-import { getAuthToken } from "./guards/token";
+import { getAuthToken, getUserRole } from "./guards/token";
 
 function RequireAuth({ children }: { children: ReactNode }) {
     const token = getAuthToken();
@@ -17,6 +17,17 @@ function RequireAuth({ children }: { children: ReactNode }) {
 
     if (!token) {
         return <Navigate to="/login_user" state={{ from: location }} replace />;
+    }
+
+    return children;
+}
+
+function RequireDoctor({ children }: { children: ReactNode }) {
+    const isDoctor = getUserRole();
+    const location = useLocation();
+
+    if (!isDoctor) {
+        return <Navigate to="/" state={{ from: location }} replace />;
     }
 
     return children;
@@ -30,12 +41,17 @@ export default function AppRouter(){
                 <Route path='/register' element={<Register/>}/>
                 <Route path='/login_doctor' element={<LoginDoctor/>}/>
                 <Route path='/login_user' element={<LoginUser/>}/>
-                <Route path='/seepatient' element={<RequireAuth><><HeaderL/><Customers/></></RequireAuth>}/>
+                <Route path='/seepatient' element={
+                    <RequireAuth>
+                        <RequireDoctor>
+                            <><HeaderL/><Customers/></>
+                        </RequireDoctor>
+                    </RequireAuth>
+                }/>
                 <Route path='/procedimiento/:id' element={<RequireAuth><NavMosaico /></RequireAuth>}/>
                 <Route path='/procedimientos/:id' element={<RequireAuth><HeaderL/><Procedimientos /></RequireAuth>}/>
                 <Route path='*' element={<Navigate to='/' replace />}/>
             </Routes>
-        
         </BrowserRouter>
     );
 }

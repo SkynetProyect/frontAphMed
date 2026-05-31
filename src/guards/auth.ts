@@ -1,6 +1,6 @@
 import PacienteAdapter from "../services/PacienteAdapter";
 import type PacienteInterface from "../interfaces/PacienteInterface";
-import { setAuthToken } from "./token";
+import { setAuthToken, setUserRole } from "./token";
 
 export type LoginResponse = {
     codigo: number;
@@ -17,6 +17,7 @@ export const loginWithBearer = async (identificacion: string, password: string,i
 
     if (response && response.codigo === 200 && response.data?.token) {
         setAuthToken(response.data.token);
+        setUserRole(response.data.paciente.is_doctor);
     }
 
     return response;

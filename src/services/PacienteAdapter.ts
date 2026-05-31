@@ -1,6 +1,7 @@
 import type PacienteInterface from "../interfaces/PacienteInterface";
 import backroute from "../enviroments/enviroment";
 import { getAuthHeaders, setAuthToken } from "../guards/token";
+import type PaginatedResult from "../interfaces/PaginatedResult"
 
 type LoginResponse = {
     codigo: number;
@@ -13,17 +14,28 @@ type LoginResponse = {
 
 export default class PacienteAdapter{
     
-    getAll(): Promise<Array<PacienteInterface>> {
-        return fetch(backroute + '/pacientes', {
+    getAll(page: number = 1, pageSize: number = 10): Promise<PaginatedResult<PacienteInterface>> {
+        const params = new URLSearchParams({
+            page: page.toString(),
+            pageSize: pageSize.toString()
+        });
+
+        return fetch(`${backroute}/pacientes?${params}`, {
             headers: getAuthHeaders()
         })
         .then(response => response.json())
-        .then((data: { data: PacienteInterface[] }) => {
-                    return data.data;
-                })
+        .then((res: { status: number; message: string; data: PaginatedResult<PacienteInterface> }) => {
+            return res.data; // Response.data => PaginatedResult
+        })
         .catch(error => {
             console.error('Error fetching Paciente data:', error);
-            return [];
+            return {
+                data: [],
+                total: 0,
+                page,
+                pageSize,
+                totalPages: 0
+            };
         });
     }
 

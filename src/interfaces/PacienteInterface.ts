@@ -5,5 +5,6 @@ export default interface PacienteInterface {
     telefono: string,
     tipo_documento: number,
     identificacion: string,
-    clave?: string
+    clave?: string,
+    is_doctor: boolean
 }
