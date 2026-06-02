@@ -1,6 +1,7 @@
 import type ProcedimientoInterface from "../interfaces/ProcedimientoInterface";
 import backroute from "../enviroments/enviroment";
 import { getAuthHeaders } from "../guards/token";
+import showBackendErrors from "./errors/showBackendErrors";
 
 export default class ProcedimientoAdapter{
     
@@ -32,18 +33,20 @@ export default class ProcedimientoAdapter{
         });
     }
 
-    create(paciente: ProcedimientoInterface): Promise<ProcedimientoInterface> {
-        console.log('Creating Procedimiento:', paciente);
+    create(procedimiento: ProcedimientoInterface): Promise<ProcedimientoInterface> {
+        procedimiento.categoria_id = Number(procedimiento.categoria_id);
         return fetch(`${backroute}/procedimientos`, {
             method: 'POST',
             headers: getAuthHeaders({
                 'Content-Type': 'application/json'
             }),
-            body: JSON.stringify(paciente)
+            body: JSON.stringify(procedimiento)
         })
         .then(response => response.json())
         .then((data: { data: ProcedimientoInterface, codigo: number, mensaje: string }) => {
-            data['codigo']!=201 && alert(`Error creating Procedimiento: ${JSON.stringify(data.mensaje)}`);
+            if(data['codigo']!=201){
+                showBackendErrors(data);
+                throw new Error(data['mensaje']);}
             return data.data;
         })
         .catch(error => {
@@ -52,13 +55,15 @@ export default class ProcedimientoAdapter{
         });
     }
 
-    update(paciente: ProcedimientoInterface): Promise<ProcedimientoInterface> {
-        return fetch(`${backroute}/procedimientos/`, {
+    async update(objeto: ProcedimientoInterface): Promise<ProcedimientoInterface> {
+        objeto.categoria_id = Number(objeto.categoria_id);
+        console.log('Updating Procedimiento:', objeto);
+        return await fetch(`${backroute}/procedimientos/`, {
             method: 'PUT',
             headers: getAuthHeaders({
                 'Content-Type': 'application/json'
             }),
-            body: JSON.stringify(paciente)
+            body: JSON.stringify(objeto)
         })
         .then(response => response.json())
         .then((data: { data: ProcedimientoInterface }) => {

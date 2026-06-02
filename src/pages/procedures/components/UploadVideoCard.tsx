@@ -29,7 +29,7 @@ export default function UploadVideoCard({
 
             setLoading(true);
 
-            const response = await adapter.create( videoData,file);
+            await adapter.create( videoData,file);
 
             /* 🔄 callback opcional */
             onUpload?.();

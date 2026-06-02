@@ -2,7 +2,6 @@
 import HeroBadge from "./HeroBadge";
 import HeroStatsCard from "./HeroStatsCard";
 import HeroFeatures from "./HeroFeatures";
-import HeroButtons from "./HeroButtons";
 import HeroCertifications from "./HeroCertifications";
 
 export default function HeroSection() {

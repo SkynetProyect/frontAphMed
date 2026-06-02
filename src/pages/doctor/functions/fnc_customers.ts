@@ -18,8 +18,13 @@ export default function fnc_customers() {
     }, [page, pageSize]);
 
     async function registerPacient(form: PacienteInterface) {
-        const respuesta = await new PacienteAdapter().create(form);
-        setPacientes([...pacientes, respuesta]);
+        try {
+            const respuesta = await new PacienteAdapter().create(form);
+            setPacientes([...pacientes, respuesta]);
+        } catch (error) {
+            console.log(error)
+            // error already shown by showBackendErrors, just don't update state
+        }
     }
         
     return { pacientes, setPacientes, registerPacient, page, setPage, pageSize, total, totalPages };

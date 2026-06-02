@@ -1,4 +1,4 @@
-import { ShieldCheck, ArrowRight } from "lucide-react";
+import { ShieldCheck, ArrowRight, Link } from "lucide-react";
 import {  useNavigate } from "react-router-dom";
 import { removeAuthToken } from "../../guards/token";
 
@@ -22,15 +22,19 @@ export default function HeaderL() {
               Gestión Clínica
             </p>
           </div>
-        </div>
+        </div> 
+        
+        <button 
+          onClick={() => navigate("/seepatient")}
+          className="inline-flex items-center gap-3 bg-gradient-to-r from-indigo-600 to-emerald-500 hover:opacity-90 transition-all font-semibold px-6 py-3 rounded-xl shadow-lg group !text-white hover:!text-white"
+        >
+          lista pacientes
+          <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+        </button>
 
-        {/* Navigation */}
-        <nav className="hidden md:flex items-center gap-12">
-
-
-        </nav>
 
         {/* CTA */}
+
         <button className="group flex items-center gap-3 bg-gradient-to-r from-red-600 to-emerald-500 hover:opacity-90 transition-all text-white font-semibold px-6 py-3 rounded-xl shadow-lg"
           onClick={() =>{
             removeAuthToken();

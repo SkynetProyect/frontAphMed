@@ -4,9 +4,11 @@ import useProcedimientos from "./functions/fnc_procedimientos";
 import CButton from "../../components/logics/CButton";
 import FormularioProcedimiento from "./forms/FormularioProcedimiento";
 import Popup from "reactjs-popup";
+import { getUserRole } from "../../guards/token";
 
 
 export default function Procedimientos({ idpatient }: Readonly<{ idpatient?: number }>) {
+    const isDoctor = getUserRole();
     const params = useParams();
     const patientId = idpatient ?? Number.parseInt(params.id ?? "0", 10);
     //* react functions separated */
@@ -61,9 +63,11 @@ export default function Procedimientos({ idpatient }: Readonly<{ idpatient?: num
 
         </div>
 
-        <Popup trigger={<CButton text="Agregar" />} modal nested>
-            <FormularioProcedimiento id={patientId} />
-        </Popup>
+        {isDoctor && (
+            <Popup trigger={<CButton text="Agregar" />} modal nested>
+                <FormularioProcedimiento id={patientId} />
+            </Popup>
+        )}
     </>
 );
 }

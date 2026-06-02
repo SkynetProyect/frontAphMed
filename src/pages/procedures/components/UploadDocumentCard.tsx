@@ -29,7 +29,7 @@ export default function UploadDocumentCard({
 
             setLoading(true);
 
-            const response = await adapter.create( documentoData, file);
+            await adapter.create( documentoData, file);
             
 
             /* 🔄 callback opcional */

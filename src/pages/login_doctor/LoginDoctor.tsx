@@ -17,7 +17,7 @@ export default function LoginDoctor() {
             const handleTimeUpdate = () => {
 
                 // detener al llegar a la mitad
-                if (video.currentTime >= 4) {
+                if (video.currentTime >= 8) {
 
                     video.pause();
 

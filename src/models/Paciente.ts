@@ -7,4 +7,5 @@ export default class Paciente implements PacienteInterface{
     telefono: string = "";
     tipo_documento: number = 0;
     identificacion: string = "";
+    is_doctor: boolean = false;
 }

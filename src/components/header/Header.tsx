@@ -45,12 +45,7 @@ export default function Header() {
             Sobre Nosotros
           </a>
 
-          <a
-            href="#"
-            className="text-gray-700 hover:text-slate-900 transition-colors font-medium"
-          >
-            Contacto
-          </a>
+
         </nav>
 
         {/* CTA */}

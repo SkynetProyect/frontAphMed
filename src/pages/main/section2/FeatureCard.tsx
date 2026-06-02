@@ -37,11 +37,6 @@ export default function FeatureCard({
           {description}
         </p>
 
-        {/* LINK */}
-        <button className="mt-10 inline-flex items-center gap-2 text-[#5b34ff] font-semibold text-lg hover:gap-3 transition-all">
-          Saber más
-          <ChevronRight size={18} />
-        </button>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import type ImagenInterface from "../../../interfaces/ImagenInterface";
-import { use, useEffect, useState } from "react";
+import {useEffect, useState } from "react";
 import type VideoInterface from "../../../interfaces/VideoInterface";
 import type DocumentoInterface from "../../../interfaces/DocumentoInterface";
 import Procedimiento from "../../../models/Procedimiento";
@@ -17,8 +17,8 @@ export default function useNavMosaico(procedimientoId: number, navigator: Naviga
     
     const [activeTab, setActiveTab] = useState<"imagenes" | "videos" | "documentos">("imagenes");
     const adapter = new ProcedimientoAdapter();
-    const actualizar = (formulario: ProcedimientoInterface) => {
-        adapter.update(formulario);
+    const actualizar = async (formulario: ProcedimientoInterface) => {
+        await adapter.update(formulario);
         navigator(0);
     }
     const [imagenes, setImagenes] = useState<ImagenInterface[]>([]);
@@ -51,7 +51,7 @@ export default function useNavMosaico(procedimientoId: number, navigator: Naviga
         })
     }, [procedimientoId]);
 
-        /* 🧠 3. SOLO IMÁGENES */
+ 
     useEffect(() => {
 
         new ImagenAdapter()

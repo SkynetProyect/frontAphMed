@@ -7,5 +7,6 @@ export default class Register implements PacienteInterface{
     tipo_documento: number = 0;
     identificacion: string = "";
     clave: string = "";
+    is_doctor: boolean = false;
     
 }

@@ -7,6 +7,7 @@ import type TypeccInterface from "../../../interfaces/TypeccInterface";
 import { useEffect, useState } from "react";
 import { loginWithBearer } from "../../../guards/auth";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast/headless";
 
 export default function fnc_formularioLoginUser() {
     const navigate = useNavigate(); 
@@ -17,7 +18,9 @@ export default function fnc_formularioLoginUser() {
             if (response.codigo === 200 && response.data?.paciente?.id) {
                 navigate("/procedimientos/" + response.data.paciente.id);
             } else {
-                setErrores([response.mensaje]);
+                toast.error(`${response.mensaje}`, {
+                duration: 5000,
+              });
             }
         });
     }

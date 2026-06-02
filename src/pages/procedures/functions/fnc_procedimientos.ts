@@ -1,12 +1,11 @@
-import { useContext, useEffect, useMemo, useState } from "react";
-import { SocketContext } from "../../../components/hooks/socket-reducers/SocketContext";
+import { useEffect, useMemo, useState } from "react";
 import ProcedimientoAdapter from "../../../services/ProcedimientoAdapter";
 import type CategoriaInterface from "../../../interfaces/CategoriaInterface";
 import type ProcedimientoInterface from "../../../interfaces/ProcedimientoInterface";
 import CategoriaAdapter from "../../../services/CategoriaAdapter";
 
 export default function useProcedimientos(idpatient: number) {
-    const { socket } = useContext(SocketContext).SocketState;
+
 
     const [procedimientos, setProcedimientos] = useState<ProcedimientoInterface[]>([]);
     const [categorias, setCategorias] = useState<CategoriaInterface[]>([]);
@@ -49,7 +48,6 @@ export default function useProcedimientos(idpatient: number) {
     }, [categorias]);
 
     return {
-        socket,
         procedimientos,
         categorias,
         categoriaMap,

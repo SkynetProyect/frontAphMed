@@ -1,8 +1,6 @@
 import React, { useEffect, useReducer, useState, type PropsWithChildren } from "react";
 import { defaultSocketContextState, SocketContextProvider, socketContextReducer } from "./SocketContext";
 import { useSocket } from "../useSocket";
-import { Socket } from "socket.io-client";
-import type SocketUpdateInterface from "../../../interfaces/SocketUpdateInterface";
 
 export interface ISocketContextComponentProps extends PropsWithChildren{}
 

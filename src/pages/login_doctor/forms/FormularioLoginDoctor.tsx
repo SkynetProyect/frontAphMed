@@ -4,6 +4,7 @@ import Login from "../../../models/Login";
 import { loginWithBearer } from "../../../guards/auth";
 import { useNavigate } from "react-router-dom";
 import type LoginInterface from "../../../interfaces/LoginInterface";
+import { toast } from "react-hot-toast/headless";
 
 export default function FormularioLoginDoctor() {
   const navigate = useNavigate();
@@ -13,7 +14,9 @@ export default function FormularioLoginDoctor() {
           if (response.codigo === 200 && response.data?.paciente?.id) {
               navigate("/seepatient");
           } else {
-              alert([response.mensaje]);
+              toast.error(`${response.mensaje}`, {
+                duration: 5000,
+              });
           }
       });
   }

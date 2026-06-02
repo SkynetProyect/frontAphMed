@@ -13,6 +13,7 @@ export default function useForm<T>(initialValues: new () => T, onSubmit: (form: 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
+        console.log(name,value);
         setForm({
         ...form,
         [name]: value
@@ -21,7 +22,6 @@ export default function useForm<T>(initialValues: new () => T, onSubmit: (form: 
 
     const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault(); // evita recargar la página
-        console.log("Datos enviados:", form);
         onSubmit(form);
     };
 

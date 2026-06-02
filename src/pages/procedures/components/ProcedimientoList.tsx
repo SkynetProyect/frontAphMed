@@ -1,6 +1,5 @@
 import useProcedimientoList from "../functions/fnc_procedimientoList";
 import type ProcedimientoInterface from "../../../interfaces/ProcedimientoInterface";
-import type CategoriaInterface from "../../../interfaces/CategoriaInterface";
 
 export default function ProcedimientoList({ procedimiento, categoriaName }: Readonly<{ procedimiento: ProcedimientoInterface; categoriaName: string }>) {
     const fncprocedimientoList = useProcedimientoList({ procedimiento });

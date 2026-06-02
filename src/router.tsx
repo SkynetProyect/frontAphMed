@@ -10,10 +10,13 @@ import HeaderL from "./components/header/HeaderL";
 import NavMosaico from "./pages/procedures/components/NavMosaico";
 import Procedimientos from "./pages/procedures/Procedimientos";
 import { getAuthToken, getUserRole } from "./guards/token";
+import { Toaster } from "react-hot-toast";
+import HeaderD from "./components/header/HeaderD";
 
 function RequireAuth({ children }: { children: ReactNode }) {
     const token = getAuthToken();
     const location = useLocation();
+   
 
     if (!token) {
         return <Navigate to="/login_user" state={{ from: location }} replace />;
@@ -34,8 +37,10 @@ function RequireDoctor({ children }: { children: ReactNode }) {
 }
 
 export default function AppRouter(){
+    const isDoctor = getUserRole();
     return(
         <BrowserRouter>
+            <Toaster position="top-right" />
             <Routes>
                 <Route path='/' element={<><Header/><Main/></>}/>
                 <Route path='/register' element={<Register/>}/>
@@ -44,12 +49,22 @@ export default function AppRouter(){
                 <Route path='/seepatient' element={
                     <RequireAuth>
                         <RequireDoctor>
-                            <><HeaderL/><Customers/></>
+                            <><HeaderD/><Customers/></>
                         </RequireDoctor>
                     </RequireAuth>
                 }/>
-                <Route path='/procedimiento/:id' element={<RequireAuth><NavMosaico /></RequireAuth>}/>
-                <Route path='/procedimientos/:id' element={<RequireAuth><HeaderL/><Procedimientos /></RequireAuth>}/>
+                <Route path='/procedimiento/:id' element={
+                    <RequireAuth>
+                        {isDoctor ? <HeaderD /> : <HeaderL />}
+                        <NavMosaico />
+                    </RequireAuth>
+                }/>
+                <Route path='/procedimientos/:id' element={
+                    <RequireAuth>
+                        {isDoctor ? <HeaderD /> : <HeaderL />}
+                        <Procedimientos />
+                    </RequireAuth>
+                }/>
                 <Route path='*' element={<Navigate to='/' replace />}/>
             </Routes>
         </BrowserRouter>

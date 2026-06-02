@@ -17,7 +17,7 @@ export default function LoginUser() {
             const handleTimeUpdate = () => {
 
                 // detener al llegar a la mitad
-                if (video.currentTime >= 5) {
+                if (video.currentTime >= 10) {
 
                     video.pause();
 

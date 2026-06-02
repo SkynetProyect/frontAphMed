@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import useForm from "../../../components/hooks/useForm";
 import { useParams } from "react-router-dom";
+import type ProcedimientoInterface from "../../../interfaces/ProcedimientoInterface";
+import type CategoriaInterface from "../../../interfaces/CategoriaInterface";
+import type PacienteInterface from "../../../interfaces/PacienteInterface";
+import Categoria from "../../../models/Categoria";
+import Paciente from "../../../models/Paciente";
+import Procedimiento from "../../../models/Procedimiento";
 
 
 export default function VerProcedimiento() {

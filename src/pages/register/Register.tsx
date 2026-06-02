@@ -13,7 +13,7 @@ export default function Register() {
 
         const handleCreatePacient =
         async (form: PacienteInterface) => {
-
+            form.tipo_documento = Number(form.tipo_documento);
             await createPacient(
                 form,
                 navigate

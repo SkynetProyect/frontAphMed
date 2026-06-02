@@ -2,6 +2,7 @@ import type PacienteInterface from "../interfaces/PacienteInterface";
 import backroute from "../enviroments/enviroment";
 import { getAuthHeaders, setAuthToken } from "../guards/token";
 import type PaginatedResult from "../interfaces/PaginatedResult"
+import showBackendErrors from "./errors/showBackendErrors";
 
 type LoginResponse = {
     codigo: number;
@@ -15,13 +16,15 @@ type LoginResponse = {
 export default class PacienteAdapter{
     
     getAll(page: number = 1, pageSize: number = 10): Promise<PaginatedResult<PacienteInterface>> {
+        const headers = getAuthHeaders();
+        console.log('Fetching Paciente data with headers:', headers);
         const params = new URLSearchParams({
             page: page.toString(),
             pageSize: pageSize.toString()
         });
 
         return fetch(`${backroute}/pacientes?${params}`, {
-            headers: getAuthHeaders()
+            headers: headers
         })
         .then(response => response.json())
         .then((res: { status: number; message: string; data: PaginatedResult<PacienteInterface> }) => {
@@ -64,7 +67,12 @@ export default class PacienteAdapter{
         })
         .then(response => response.json())
         .then((data: { data: PacienteInterface, codigo: number, mensaje: string }) => {
-            data['codigo']!=201 && alert(`Error creating Paciente: ${JSON.stringify(data.mensaje)}`);
+            
+            if(data['codigo']!=201) {
+                showBackendErrors(data);
+                throw new Error(data['mensaje'] || 'Error creating Paciente');
+            }
+
             return data.data;
         })
         .catch(error => {
@@ -83,6 +91,7 @@ export default class PacienteAdapter{
         })
         .then(response => response.json())
         .then((data: { data: PacienteInterface }) => {
+            
             return data.data;
         })
         .catch(error => {
@@ -117,6 +126,8 @@ export default class PacienteAdapter{
         .then((data: LoginResponse) => {
             if (data.codigo === 200 && data.data?.token) {
                 setAuthToken(data.data.token);
+            }else{
+                showBackendErrors(data);
             }
             return data;
         })

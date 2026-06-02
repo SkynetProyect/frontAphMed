@@ -29,7 +29,7 @@ export default function UploadImagenCard({
 
             setLoading(true);
 
-            const response = await adapter.create( imagenData,file);
+            await adapter.create( imagenData,file);
         
 
             /* 🔄 callback opcional */

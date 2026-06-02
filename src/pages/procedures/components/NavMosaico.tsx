@@ -1,5 +1,5 @@
 
-import HeaderL from "../../../components/header/HeaderL";
+
 import useNavMosaico from "../functions/fnc_navMosaico";
 import { useNavigate, useParams } from "react-router-dom";
 import FormDivText from "../../../components/logics/FormDivText";
@@ -12,18 +12,19 @@ import DocMosaico from "./DocMosaico";
 import UploadImagenCard from "./UploadImagenCard";
 import UploadVideoCard from "./UploadVideoCard";
 import UploadDocumentCard from "./UploadDocumentCard";
+import { getUserRole } from "../../../guards/token";
 
 export default function NavMosaico() {
-
+    const isDoctor = getUserRole();
     const { id } = useParams();
     const navigator = useNavigate();
 
-    const fncnavMosaico = useNavMosaico(Number(id), navigator);
+    const {form, handleChange, handleSubmit,
+        activeTab, setActiveTab, visuales, eliminar,
+        imagenes, videos, documentos, categorias } = useNavMosaico(Number(id), navigator);
 
     return (
         <div className="min-h-screen bg-gray-100">
-
-            <HeaderL />
 
             <div className="max-w-6xl mx-auto p-6 space-y-6">
 
@@ -35,7 +36,7 @@ export default function NavMosaico() {
                     </h2>
 
                     <form
-                        onSubmit={fncnavMosaico.handleSubmit}
+                        onSubmit={handleSubmit}
                         className="space-y-4"
                     >
 
@@ -44,9 +45,9 @@ export default function NavMosaico() {
                             titulo="Nombre"
                             id="nombre"
                             type="text"
-                            visuals={fncnavMosaico.visuales}
-                            value={fncnavMosaico.form.nombre}
-                            alcambio={fncnavMosaico.handleChange}
+                            visuals={visuales}
+                            value={form.nombre}
+                            alcambio={handleChange}
                         />
 
                         <FormDivText
@@ -54,24 +55,26 @@ export default function NavMosaico() {
                             titulo="Descripcion"
                             id="descripcion"
                             type="text"
-                            visuals={fncnavMosaico.visuales}
-                            value={fncnavMosaico.form.descripcion}
-                            alcambio={fncnavMosaico.handleChange}
+                            visuals={visuales}
+                            value={form.descripcion}
+                            alcambio={handleChange}
                         />
 
                         <FormDivSelect
-                            nombre="categoria"
+                            nombre="categoria_id"
                             titulo="Categoria"
                             id="categoria_id"
-                            visuals={fncnavMosaico.visuales}
-                            value={fncnavMosaico.form.categoria_id}
-                            alcambio={fncnavMosaico.handleChange}
-                            iterador={fncnavMosaico.categorias}
+                            visuals={visuales}
+                            value={String(form.categoria_id)}
+                            alcambio={handleChange}
+                            iterador={categorias}
                             nombredesignado={"nombre"}
                         />
 
                         <div className="flex justify-end pt-4">
-                            <button
+                            {isDoctor && (
+                                <>
+                                 <button
                                 type="submit"
                                 className="
                                     bg-blue-600
@@ -87,7 +90,7 @@ export default function NavMosaico() {
                                 Modificar
                             </button>
                             <button
-                                onClick={fncnavMosaico.eliminar}
+                                onClick={eliminar}
                                 className="
                                     bg-red-600
                                     hover:bg-red-700
@@ -101,6 +104,9 @@ export default function NavMosaico() {
                             >
                                 Eliminar
                             </button>
+                            </>
+                             )}
+                           
                         </div>
 
                     </form>
@@ -113,25 +119,25 @@ export default function NavMosaico() {
 
                         <TabButton
                             label="Imágenes"
-                            active={fncnavMosaico.activeTab === "imagenes"}
+                            active={activeTab === "imagenes"}
                             onClick={() =>
-                                fncnavMosaico.setActiveTab("imagenes")
+                                setActiveTab("imagenes")
                             }
                         />
 
                         <TabButton
                             label="Videos"
-                            active={fncnavMosaico.activeTab === "videos"}
+                            active={activeTab === "videos"}
                             onClick={() =>
-                                fncnavMosaico.setActiveTab("videos")
+                                setActiveTab("videos")
                             }
                         />
 
                         <TabButton
                             label="Documentos"
-                            active={fncnavMosaico.activeTab === "documentos"}
+                            active={activeTab === "documentos"}
                             onClick={() =>
-                                fncnavMosaico.setActiveTab("documentos")
+                                setActiveTab("documentos")
                             }
                         />
 
@@ -141,10 +147,10 @@ export default function NavMosaico() {
                     <div className="p-6">
 
                         {/* 🖼️ IMÁGENES */}
-                        {fncnavMosaico.activeTab === "imagenes" && (
+                        {activeTab === "imagenes" && (
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                {fncnavMosaico.imagenes?.map((imagen: ImagenInterface, index: number) => (
+                                {imagenes?.map((imagen: ImagenInterface, index: number) => (
                                     <ImgMosaico key={index} objeto={imagen} index={index} />
                                 ))}
                                 <UploadImagenCard procedimientoId={Number(id)} onUpload={() => window.location.reload()}/>
@@ -154,10 +160,10 @@ export default function NavMosaico() {
                         )}
 
                         {/* 🎥 VIDEOS */}
-                        {fncnavMosaico.activeTab === "videos" && (
+                        {activeTab === "videos" && (
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {fncnavMosaico.videos?.map((video: VideoInterface, index: number) => (
+                                {videos?.map((video: VideoInterface, index: number) => (
                                     <VidMosaico key={index} index={index} objeto={video}/>
                                 ))}
                                 < UploadVideoCard procedimientoId={Number(id)} onUpload={() => window.location.reload()} />
@@ -166,10 +172,10 @@ export default function NavMosaico() {
                         )}
 
                         {/* 📄 DOCUMENTOS */}
-                        {fncnavMosaico.activeTab === "documentos" && (
+                        {activeTab === "documentos" && (
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                                {fncnavMosaico.documentos?.map((documento: any, index: number) => (
+                                {documentos?.map((documento: any, index: number) => (
                                     <DocMosaico key={index} objeto={documento} index={index} />
                                 ))}
                                 < UploadDocumentCard procedimientoId={Number(id)} onUpload={() => window.location.reload()} />
