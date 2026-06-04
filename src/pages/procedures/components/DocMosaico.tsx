@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import type DocumentoInterface from "../../../interfaces/DocumentoInterface";
 import DocumentoAdapter from "../../../services/DocumentoAdapter";
+import { getUserRole } from "../../../guards/token";
 
 export default function DocMosaico({
     objeto,
@@ -11,7 +12,7 @@ export default function DocMosaico({
 }>) {
 
     const adapter = new DocumentoAdapter();
-
+    const isDoctor = getUserRole();
     const navigate = useNavigate();
 
     return (
@@ -51,7 +52,7 @@ export default function DocMosaico({
 
             </a>
 
-            {/* 🗑 ELIMINAR */}
+            {isDoctor && (
             <button
                 className="
                     absolute
@@ -77,6 +78,7 @@ export default function DocMosaico({
             >
                 Eliminar
             </button>
+            )}
 
         </div>
 

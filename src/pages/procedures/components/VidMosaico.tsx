@@ -2,9 +2,11 @@
 import { useNavigate } from "react-router-dom";
 import type VideoInterface from "../../../interfaces/VideoInterface";
 import VideoAdapter from "../../../services/VideoAdapter";
+import { getUserRole } from "../../../guards/token";
 
 export default function VidMosaico({objeto, index}: Readonly<{objeto: VideoInterface, index: number}>) {
     const adapter = new VideoAdapter();
+    const isDoctor = getUserRole();
     const navigate = useNavigate();
     return (
         <div
@@ -44,7 +46,7 @@ export default function VidMosaico({objeto, index}: Readonly<{objeto: VideoInter
 
          </a>
 
-            {/* 🗑 BOTÓN ELIMINAR (SOLO UI) */}
+            {isDoctor && (
             <button
                 className="
                     absolute
@@ -68,6 +70,7 @@ export default function VidMosaico({objeto, index}: Readonly<{objeto: VideoInter
             >
                 Eliminar
             </button>
+            )}
 
         </div>
     );

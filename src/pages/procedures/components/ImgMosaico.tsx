@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import type ImagenInterface from "../../../interfaces/ImagenInterface";
 import ImagenAdapter from "../../../services/ImagenAdapter";
+import { getUserRole } from "../../../guards/token";
 
 
 export default function ImgMosaico({
@@ -11,6 +12,7 @@ export default function ImgMosaico({
     index: number
 }>) {
     const navigate = useNavigate();
+    const isDoctor = getUserRole();
     const adapter = new ImagenAdapter();
     return (
 
@@ -50,31 +52,33 @@ export default function ImgMosaico({
                 />
 
             </a>
+            {isDoctor && (
+            
+                <button
+                    className="
+                        absolute
+                        top-2
+                        right-2
+                        bg-red-600
+                        text-white
+                        text-xs
+                        px-2
+                        py-1
+                        rounded-md
+                        opacity-0
+                        group-hover:opacity-100
+                        transition
+                    "
+                    
+                    onClick={() => {
+                        adapter.delete(objeto.id!);
+                        navigate(0);
 
-            {/* 🗑 BOTÓN ELIMINAR (SOLO UI) */}
-            <button
-                className="
-                    absolute
-                    top-2
-                    right-2
-                    bg-red-600
-                    text-white
-                    text-xs
-                    px-2
-                    py-1
-                    rounded-md
-                    opacity-0
-                    group-hover:opacity-100
-                    transition
-                "
-                onClick={() => {
-                    adapter.delete(objeto.id!);
-                    navigate(0);
-
-                 }}
-            >
-                Eliminar
-            </button>
+                    }}
+                >
+                    Eliminar
+                </button>
+            )}
 
         </div>
 

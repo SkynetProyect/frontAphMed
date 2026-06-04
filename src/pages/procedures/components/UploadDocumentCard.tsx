@@ -75,16 +75,20 @@ export default function UploadDocumentCard({
             "
         >
 
-            <div className="text-5xl mb-3">
-                ➕
+            <div className="mb-3">
+                {
+                    loading ? (
+                        <div className="flex items-center justify-center">
+                            <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                        </div>
+                    ) : (
+                        <div className="text-5xl">➕</div>
+                    )
+                }
             </div>
 
             <span className="font-semibold">
-                {
-                    loading
-                        ? "Subiendo..."
-                        : "Agregar documento"
-                }
+                {loading ? "Subiendo..." : "Agregar documento"}
             </span>
 
             <span className="text-sm mt-1">
