@@ -12,6 +12,7 @@ import Procedimientos from "./pages/procedures/Procedimientos";
 import { getAuthToken, getUserRole } from "./guards/token";
 import { Toaster } from "react-hot-toast";
 import HeaderD from "./components/header/HeaderD";
+import Admin from "./pages/admin/Admin";
 
 function RequireAuth({ children }: { children: ReactNode }) {
     const token = getAuthToken();
@@ -66,6 +67,7 @@ export default function AppRouter(){
                     </RequireAuth>
                 }/>
                 <Route path='*' element={<Navigate to='/' replace />}/>
+                <Route path='/admin' element={<Admin/>}/>
             </Routes>
         </BrowserRouter>
     );

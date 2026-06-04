@@ -62,8 +62,8 @@ export default function VidMosaico({objeto, index}: Readonly<{objeto: VideoInter
                     group-hover:opacity-100
                     transition
                 "
-                onClick={() => {
-                    adapter.delete(objeto.id!);
+                onClick={async () => {
+                    await adapter.delete(objeto.id!);
                     navigate(0);
 
                  }}

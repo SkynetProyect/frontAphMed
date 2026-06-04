@@ -42,6 +42,36 @@ export default class PacienteAdapter{
         });
     }
 
+    getDoctors(): Promise<PacienteInterface[]> {
+        const headers = getAuthHeaders();
+
+        return fetch(`${backroute}/pacientes/doctors`, {
+            headers: headers,
+            cache: 'no-store'
+        })
+        .then(response => {
+            if (response.status === 204 || response.status === 304) {
+                // No content / not modified — return empty list
+                return { data: [] } as { data: PacienteInterface[] };
+            }
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            return response.json();
+        })
+        .then((res: { status?: number; message?: string; data: PacienteInterface[] }) => {
+            return res.data ?? [];
+        })
+        .catch(error => {
+            console.error('Error fetching Paciente data:', error);
+            return [];
+        });
+    }
+
+
+
     getById(id: number): Promise<PacienteInterface> {
         return fetch(`${backroute}/pacientes/${id}`, {
             headers: getAuthHeaders()

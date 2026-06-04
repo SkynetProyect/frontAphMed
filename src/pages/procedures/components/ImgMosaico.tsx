@@ -70,8 +70,8 @@ export default function ImgMosaico({
                         transition
                     "
                     
-                    onClick={() => {
-                        adapter.delete(objeto.id!);
+                    onClick={async () => {
+                        await adapter.delete(objeto.id!);
                         navigate(0);
 
                     }}
